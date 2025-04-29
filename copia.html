@@ -1,1 +1,273 @@
-xxx
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pokedex SangioSuba</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Press Start 2P', cursive;
+      background-color: #fff;
+      color: #000;
+    }
+    header {
+      background-color: #cc0000;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+    nav {
+      background-color: #000;
+      color: white;
+      padding: 0.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+    nav span {
+      cursor: pointer;
+      padding: 0.3rem 0.5rem;
+      background: #cc0000;
+      border-radius: 4px;
+    }
+    .search-bar {
+      text-align: center;
+      margin: 1rem;
+    }
+    .search-bar input {
+      font-family: 'Press Start 2P', cursive;
+      padding: 0.5rem;
+      width: 80%;
+      font-size: 0.6rem;
+    }
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem;
+    }
+    .poke-bar {
+      background-color: white;
+      border: 2px solid black;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 500px;
+      padding: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.2s ease;
+      animation: slideIn 0.3s ease;
+    }
+    @keyframes slideIn {
+      from { transform: translateX(-20px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    .poke-bar:hover {
+      background-color: #f5f5f5;
+      transform: scale(1.03);
+    }
+    .poke-bar img {
+      width: 180px;
+      height: 180px;
+    }
+    .poke-info {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+    .poke-name-line {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      font-size: 0.9rem;
+    }
+    .pagination {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      margin: 1rem;
+    }
+    .page-number {
+      background-color: #cc0000;
+      color: white;
+      padding: 0.5rem;
+      border: none;
+      cursor: pointer;
+    }
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.7);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    .modal-content {
+      background-color: white;
+      padding: 2rem;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 400px;
+    }
+    .modal-tabs {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 1rem;
+    }
+    .modal-tab {
+      cursor: pointer;
+      padding: 0.5rem;
+      background-color: #cc0000;
+      color: white;
+      border-radius: 4px;
+    }
+    .modal-tab.active {
+      background-color: #000;
+    }
+    .modal-body > div {
+      display: none;
+    }
+    .modal-body > .active {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <header>Pokedex SangioSuba</header>
+  <nav id="typeFilter">
+    <span data-type="all">All</span>
+    <span data-type="fire">🔥 Fire</span>
+    <span data-type="water">💧 Water</span>
+    <span data-type="grass">🌿 Grass</span>
+  </nav>
+  <div class="search-bar">
+    <input type="text" id="searchInput" placeholder="Search Pokémon by name...">
+  </div>
+  <div class="container" id="pokeList"></div>
+  <div class="pagination" id="pagination"></div>
+
+  <div class="modal" id="pokeModal">
+    <div class="modal-content">
+      <div class="modal-tabs">
+        <div class="modal-tab active" data-tab="info">Info</div>
+        <div class="modal-tab" data-tab="map">Map</div>
+      </div>
+      <div class="modal-body">
+        <div id="infoTab" class="active">
+          <img id="modalImage" src="" alt="" style="width: 150px; height: 150px; display:block; margin:auto;"/>
+          <p id="modalDescription" style="text-align:center; margin-top:1rem;">Pokémon description...</p>
+        </div>
+        <div id="mapTab">
+          <img src="https://archives.bulbagarden.net/media/upload/thumb/5/5b/Hoenn_ORAS_Map.png/800px-Hoenn_ORAS_Map.png" alt="Hoenn Map" style="width:100%;">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const pokemons = [
+      { id: 1, name: 'Bulbasaur', type: 'grass', description: 'A strange seed was planted on its back at birth. The plant sprouts and grows with this Pokémon.', img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png' },
+      { id: 2, name: 'Charmander', type: 'fire', description: 'Obviously prefers hot places. When it rains, steam is said to spout from the tip of its tail.', img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/4.png' },
+      { id: 3, name: 'Squirtle', type: 'water', description: 'After birth, its back swells and hardens into a shell. Powerfully sprays foam from its mouth.', img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/7.png' },
+      { id: 4, name: 'Pikachu', type: 'electric', description: 'When several of these Pokémon gather, their electricity could build and cause lightning storms.', img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png' },
+      { id: 39, name: 'Jigglypuff', type: 'fairy', description: 'When its huge eyes light up, it sings a mysteriously soothing melody that lulls its enemies to sleep.', img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/39.png' },
+      { id: 52, name: 'Meowth', type: 'normal', description: 'Adores circular objects. Wanders the streets on a nightly basis to look for dropped loose change.', img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/52.png' },
+      { id: 69, name: 'MrBigari', type: 'psychic', description: 'Si narra che MrBigari possieda la peculiare capacità di essere tradito dagli amici più stretti. Tra le altre caratteristiche, psicopatia, depravazione e disciplina, alcuni dicono di averlo visto giurare amore ad una signorina Jigglypuff incontrata in una delle sue notti brave. Dimostra spiccato intelletto quando lontano dalle sostanze psicotrope.', img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/65.png' },
+      { id: 66, name: 'Machop', type: 'fighting', description: 'Loves to build its muscles. It trains in all styles of martial arts to become even stronger.', img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/66.png' },
+      { id: 74, name: 'Geodude', type: 'rock', description: 'Found in fields and mountains. Mistaking them for boulders, people often step or trip on them.', img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/74.png' },
+      { id: 133, name: 'Eevee', type: 'normal', description: 'Its genetic code is irregular. It may mutate if it is exposed to radiation from element Stones.', img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/133.png' },
+      { id: 10, name: 'Turpe', type: 'normal', description: 'Turpe (o Luspa per gli amici) è un tipo molto vorace che adora mangiare: può consumare grandi quantità di cibo in una sola volta senza sfamarsi. Differisce dalla sua evoluzione, Maspa, per essere più attivo: tende a giocare a calcetto per polisportive non degne di nota ma qualche volta si immedesima nel Guaje di Porto Alegre.', img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/446.png' },
+    ];
+
+    let currentPage = 1;
+    const itemsPerPage = 4;
+    let currentType = 'all';
+    let currentSearch = '';
+
+    const renderList = () => {
+      const list = document.getElementById('pokeList');
+      list.innerHTML = '';
+      const filtered = pokemons.filter(p =>
+        (currentType === 'all' || p.type === currentType) &&
+        p.name.toLowerCase().includes(currentSearch.toLowerCase())
+      );
+      const start = (currentPage - 1) * itemsPerPage;
+      const pageItems = filtered.slice(start, start + itemsPerPage);
+      pageItems.forEach(p => {
+        const div = document.createElement('div');
+        div.className = 'poke-bar';
+        div.innerHTML = `
+          <div class="poke-info">
+            <div class="poke-name-line">#${p.id} ${p.name}</div>
+          </div>
+          <img src="${p.img}" alt="${p.name}" />`;
+        div.addEventListener('click', () => openModal(p));
+        list.appendChild(div);
+      });
+      renderPagination(filtered.length);
+    };
+
+    const renderPagination = (totalItems) => {
+      const pages = Math.ceil(totalItems / itemsPerPage);
+      const pagination = document.getElementById('pagination');
+      pagination.innerHTML = '';
+      for (let i = 1; i <= pages; i++) {
+        pagination.innerHTML += `<button class="page-number${i === currentPage ? ' active' : ''}" onclick="goToPage(${i})">${i}</button>`;
+      }
+    };
+
+    function goToPage(num) {
+      currentPage = num;
+      renderList();
+    }
+
+    document.getElementById('typeFilter').addEventListener('click', (e) => {
+      if (e.target.dataset.type) {
+        currentType = e.target.dataset.type;
+        currentPage = 1;
+        renderList();
+      }
+    });
+
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+      currentSearch = e.target.value;
+      currentPage = 1;
+      renderList();
+    });
+
+    function openModal(pokemon) {
+      document.getElementById('modalImage').src = pokemon.img;
+      document.getElementById('modalDescription').innerText = pokemon.description;
+      document.getElementById('pokeModal').style.display = 'flex';
+    }
+
+    document.getElementById('pokeModal').addEventListener('click', (e) => {
+      if (e.target.id === 'pokeModal') {
+        document.getElementById('pokeModal').style.display = 'none';
+      }
+    });
+
+    document.querySelectorAll('.modal-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.modal-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.modal-body > div').forEach(div => div.classList.remove('active'));
+
+        tab.classList.add('active');
+        document.getElementById(tab.dataset.tab + 'Tab').classList.add('active');
+      });
+    });
+
+    renderList();
+  </script>
+</body>
+</html>
