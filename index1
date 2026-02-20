@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pokédex SangioSuba</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <style>
+    /* ============================================================
+       CSS VARIABLES — palette ispirata a Pokémon Ruby/Sapphire GBA
+    ============================================================ */
+    :root {
+      --bg:         #1a1a2e;
+      --bg-mid:     #16213e;
+      --bg-panel:   #0f3460;
+      --red:        #e63946;
+      --red-dark:   #9d0208;
+      --gold:       #ffd700;
+      --screen-bg:  #9bbc0f;
+      --screen-mid: #8bac0f;
+      --screen-dark:#306230;
+      --white:      #e8f4f8;
+      --gray:       #8899aa;
+
+      /* Colori per tipo */
+      --suba:       #e63946;
+      --sangio:     #4895ef;
+      --signorine:  #cc55ff;
+      --outsider:   #2dc653;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Press Start 2P', cursive;
+      background-color: var(--bg);
+      color: var(--white);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ============================================================
+       SCHERMATA DI AVVIO
+    ============================================================ */
+    #bootScreen {
+      position: fixed;
+      inset: 0;
+      background: #000;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      gap: 2rem;
+      cursor: pointer;
+    }
+
+    #bootScreen.fade-out {
+      animation: bootFade 0.8s ease forwards;
+      pointer-events: none;
+    }
+
+    @keyframes bootFade { to { opacity: 0; } }
+
+    .boot-logo {
+      text-align: center;
+      animation: bootAppear 0.6s steps(1) 0.3s both;
+      opacity: 0;
+    }
+    @keyframes bootAppear { to { opacity: 1; } }
+
+    .boot-title {
+      font-size: clamp(0.8rem, 4vw, 1.4rem);
+      color: var(--gold);
+      text-shadow: 0 0 20px var(--gold), 0 0 50px #ff9900;
+      letter-spacing: 2px;
+      line-height: 2.2;
+    }
+    .boot-subtitle {
+      font-size: clamp(0.35rem, 1.5vw, 0.55rem);
+      color: var(--gray);
+      margin-top: 0.5rem;
+      letter-spacing: 4px;
+    }
+    .boot-press {
+      font-size: clamp(0.35rem, 1.2vw, 0.5rem);
+      color: var(--white);
+      animation: blink 1s steps(1) 1.5s infinite, bootAppear 0s 1.4s both;
+      opacity: 0;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0; }
+    }
+    .boot-bar {
+      width: min(240px, 60vw);
+      height: 10px;
+      background: #111;
+      border: 2px solid #333;
+      border-radius: 2px;
+      overflow: hidden;
+      animation: bootAppear 0s 0.3s both;
+      opacity: 0;
+    }
+    .boot-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--red-dark), var(--red), var(--gold));
+      animation: fillBar 1.8s ease 0.5s forwards;
+    }
+    @keyframes fillBar { to { width: 100%; } }
+
+    .boot-copy {
+      font-size: 0.3rem;
+      color: #333;
+      position: absolute;
+      bottom: 1.5rem;
+      letter-spacing: 1px;
+      animation: bootAppear 0s 0.4s both;
+      opacity: 0;
+    }
+
+    /* ============================================================
+       SCANLINES — effetto schermo GBA sull'intera pagina
+    ============================================================ */
+    #app::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 3px,
+        rgba(0,0,0,0.07) 3px,
+        rgba(0,0,0,0.07) 4px
+      );
+      pointer-events: none;
+      z-index: 500;
+    }
+
+    /* ============================================================
+       HEADER — scocca Pokédex
+    ============================================================ */
+    header {
+      background: linear-gradient(135deg, #aa0000 0%, #cc0000 35%, var(--red) 60%, #aa0000 100%);
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 0.8rem;
+      border-bottom: 4px solid #660000;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.6);
+      position: relative;
+      min-height: 64px;
+    }
+
+    .header-light {
+      border-radius: 50%;
+      flex-shrink: 0;
+      position: relative;
+      z-index: 1;
+    }
+    .header-light.big {
+      width: 42px; height: 42px;
+      background: radial-gradient(circle at 33% 33%, #aaeeff, #0077cc 70%);
+      border: 3px solid #004488;
+      box-shadow: 0 0 14px #00aaff88, inset 0 -2px 6px rgba(0,0,0,0.3);
+    }
+    .header-light.small { width: 13px; height: 13px; }
+    .header-light.yellow { background: radial-gradient(circle at 33% 33%, #ffff99, #ffaa00); border: 2px solid #cc8800; }
+    .header-light.green  { background: radial-gradient(circle at 33% 33%, #aaffaa, #00aa00); border: 2px solid #006600; }
+    .header-light.reds   { background: radial-gradient(circle at 33% 33%, #ffaaaa, #cc2200); border: 2px solid #880000; }
+    .header-lights-row   { display: flex; gap: 5px; align-items: center; position: relative; z-index: 1; }
+
+    header h1 {
+      position: absolute;
+      left: 0; right: 0;
+      text-align: center;
+      font-size: clamp(0.45rem, 2.5vw, 0.85rem);
+      color: var(--white);
+      text-shadow: 2px 2px 0 #660000;
+      letter-spacing: 1px;
+      pointer-events: none;
+    }
+
+    /* ============================================================
+       NAV — filtri
+    ============================================================ */
+    nav {
+      background: var(--bg-mid);
+      padding: 0.8rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.5rem;
+      border-bottom: 2px solid #0a1628;
+    }
+    nav span {
+      cursor: pointer;
+      padding: 0.4rem 0.7rem;
+      font-size: 0.4rem;
+      border-radius: 3px;
+      border: 2px solid transparent;
+      transition: all 0.15s;
+      letter-spacing: 0.5px;
+      user-select: none;
+    }
+    nav span[data-type="all"]       { background: #222; color: #aaa; border-color: #444; }
+    nav span[data-type="suba"]      { background: rgba(230,57,70,0.15);  color: #ff8891; border-color: var(--suba); }
+    nav span[data-type="sangio"]    { background: rgba(72,149,239,0.15); color: #90cbff; border-color: var(--sangio); }
+    nav span[data-type="signorine"] { background: rgba(247,37,133,0.15); color: #ffaadd; border-color: var(--signorine); }
+    nav span[data-type="outsider"]  { background: rgba(45,198,83,0.15);  color: #88ffaa; border-color: var(--outsider); }
+
+    nav span.active-filter { filter: brightness(1.6); transform: translateY(-2px); box-shadow: 0 3px 10px rgba(0,0,0,0.4); }
+    nav span:hover:not(.active-filter) { filter: brightness(1.3); transform: translateY(-1px); }
+
+    /* ============================================================
+       SEARCH
+    ============================================================ */
+    .search-bar {
+      text-align: center;
+      padding: 0.9rem 1rem 0.4rem;
+      background: var(--bg);
+    }
+    .search-bar input {
+      font-family: 'Press Start 2P', cursive;
+      padding: 0.6rem 1rem;
+      width: min(80%, 400px);
+      font-size: 0.45rem;
+      background: var(--bg-mid);
+      border: 2px solid #1e3a5f;
+      color: var(--white);
+      border-radius: 3px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .search-bar input:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 10px rgba(255,215,0,0.25);
+    }
+    .search-bar input::placeholder { color: #445566; }
+    .search-counter {
+      font-size: 0.32rem;
+      color: var(--gray);
+      margin-top: 0.5rem;
+      letter-spacing: 0.5px;
+    }
+    .search-counter span {
+      color: var(--gold);
+    }
+
+    /* ============================================================
+       LISTA POKEMON
+    ============================================================ */
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.8rem;
+      padding: 1rem;
+    }
+
+    .poke-bar {
+      background: linear-gradient(135deg, #1e2d4a, #243558);
+      border: 2px solid #3a5a8a;
+      border-left: 5px solid var(--type-color, #555);
+      border-radius: 5px;
+      width: 90%;
+      max-width: 520px;
+      padding: 0.9rem 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      animation: slideIn 0.25s ease both;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    }
+
+    .poke-bar::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.04) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    @keyframes slideIn {
+      from { transform: translateX(-16px); opacity: 0; }
+      to   { transform: translateX(0);     opacity: 1; }
+    }
+
+    .poke-bar[data-type="suba"]      { --type-color: var(--suba); }
+    .poke-bar[data-type="sangio"]    { --type-color: var(--sangio); }
+    .poke-bar[data-type="signorine"] { --type-color: var(--signorine); }
+    .poke-bar[data-type="outsider"]  { --type-color: var(--outsider); }
+
+    .poke-bar:hover {
+      transform: translateX(5px) scale(1.01);
+      box-shadow: -5px 0 18px rgba(0,0,0,0.5), 0 4px 16px rgba(0,0,0,0.3);
+      border-left-color: var(--type-color);
+      border-color: var(--type-color);
+    }
+
+    .poke-info { display: flex; flex-direction: column; gap: 0.5rem; flex: 1; }
+    .poke-number { font-size: 0.4rem; color: var(--gray); }
+    .poke-name   { font-size: clamp(0.5rem, 2vw, 0.72rem); color: var(--white); line-height: 1.4; }
+
+    .poke-type-badge {
+      font-size: 0.35rem;
+      padding: 0.2rem 0.45rem;
+      border-radius: 2px;
+      display: inline-block;
+      margin-top: 0.1rem;
+      letter-spacing: 0.5px;
+      width: fit-content;
+      border: 1px solid var(--type-color, #555);
+      color: var(--white);
+      background: rgba(255,255,255,0.07);
+    }
+
+    .placeholder-warning {
+      font-size: 0.32rem;
+      color: #886600;
+      margin-top: 0.1rem;
+    }
+
+    /* ===== SPRITE SHAKE/WIGGLE on hover ===== */
+    .sprite-wrap {
+      position: relative;
+      width: 90px; height: 90px;
+      flex-shrink: 0;
+    }
+    .sprite-wrap img {
+      width: 100%; height: 100%;
+      image-rendering: pixelated;
+      transition: filter 0.2s ease;
+      display: block;
+    }
+    .poke-bar:hover .sprite-wrap img {
+      animation: spriteWiggle 0.5s ease infinite;
+      filter: drop-shadow(0 2px 6px rgba(0,0,0,0.4));
+    }
+    @keyframes spriteWiggle {
+      0%   { transform: rotate(0deg) translateX(0px); }
+      15%  { transform: rotate(-6deg) translateX(-3px); }
+      30%  { transform: rotate(6deg) translateX(3px); }
+      45%  { transform: rotate(-4deg) translateX(-2px); }
+      60%  { transform: rotate(4deg) translateX(2px); }
+      75%  { transform: rotate(-2deg) translateX(-1px); }
+      90%  { transform: rotate(2deg) translateX(1px); }
+      100% { transform: rotate(0deg) translateX(0px); }
+    }
+
+    /* ============================================================
+       PAGINAZIONE
+    ============================================================ */
+    .pagination {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 1rem;
+    }
+    .page-number {
+      background: var(--bg-panel);
+      color: var(--white);
+      padding: 0.5rem 0.8rem;
+      border: 2px solid #1e3a5f;
+      cursor: pointer;
+      font-family: 'Press Start 2P', cursive;
+      font-size: 0.45rem;
+      border-radius: 3px;
+      transition: all 0.15s;
+    }
+    .page-number:hover       { background: var(--red); border-color: var(--red); }
+    .page-number.active      { background: var(--gold); color: #000; border-color: var(--gold); }
+
+    /* ============================================================
+       MODAL
+    ============================================================ */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      backdrop-filter: blur(4px);
+    }
+
+    .modal-content {
+      background: var(--bg-mid);
+      border: 3px solid var(--bg-panel);
+      border-radius: 6px;
+      width: 90%;
+      max-width: 420px;
+      position: relative;
+      overflow: hidden;
+      animation: modalIn 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    @keyframes modalIn {
+      from { transform: scale(0.82) translateY(24px); opacity: 0; }
+      to   { transform: scale(1)    translateY(0);    opacity: 1; }
+    }
+
+    /* Stripe colorata in cima per tipo */
+    .modal-type-stripe {
+      height: 5px;
+      width: 100%;
+      transition: background 0.2s;
+    }
+
+    .modal-header {
+      padding: 0.8rem 1rem 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .modal-pokemon-id {
+      font-size: 0.38rem;
+      color: var(--gray);
+      letter-spacing: 1px;
+    }
+    .modal-close {
+      background: none;
+      border: none;
+      color: var(--gray);
+      font-family: 'Press Start 2P', cursive;
+      font-size: 0.65rem;
+      cursor: pointer;
+      transition: color 0.15s;
+      line-height: 1;
+    }
+    .modal-close:hover { color: var(--red); }
+
+    .modal-tabs {
+      display: flex;
+      gap: 0;
+      margin: 0.8rem 1rem 0;
+      border-bottom: 2px solid #1e3a5f;
+    }
+    .modal-tab {
+      cursor: pointer;
+      padding: 0.4rem 0.7rem;
+      font-size: 0.38rem;
+      color: var(--gray);
+      transition: all 0.15s;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+      letter-spacing: 0.5px;
+    }
+    .modal-tab:hover  { color: var(--white); }
+    .modal-tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+    .modal-body { padding: 1rem; }
+    .modal-body > div { display: none; }
+    .modal-body > .active { display: block; }
+
+    /* Schermo grigio retro per lo sprite */
+    .sprite-screen {
+      background: linear-gradient(145deg, #c8c8c8, #b0b0b0 60%, #989898);
+      border: 3px solid #606060;
+      border-radius: 4px;
+      padding: 1rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 1rem;
+      position: relative;
+      box-shadow: inset 0 2px 10px rgba(0,0,0,0.25), inset 0 -1px 4px rgba(255,255,255,0.3), 0 2px 8px rgba(0,0,0,0.4);
+    }
+    /* Scanlines sullo schermo del modal */
+    .sprite-screen::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 3px,
+        rgba(0,0,0,0.07) 3px,
+        rgba(0,0,0,0.07) 4px
+      );
+      pointer-events: none;
+      border-radius: 2px;
+    }
+
+    #modalImage {
+      width: 120px; height: 120px;
+      image-rendering: pixelated;
+      display: block;
+      filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.5));
+      animation: floatSprite 3s ease-in-out infinite;
+      position: relative;
+      z-index: 1;
+    }
+    @keyframes floatSprite {
+      0%, 100% { transform: translateY(0px); }
+      50%       { transform: translateY(-6px); }
+    }
+
+    #modalName {
+      font-size: 0.58rem;
+      color: var(--modal-accent, var(--white));
+      text-align: center;
+      margin-bottom: 0.8rem;
+      letter-spacing: 1px;
+      text-shadow: 0 0 12px var(--modal-accent, transparent);
+    }
+    #modalDescription {
+      font-size: 0.45rem;
+      color: #ccd6f6;
+      line-height: 2.2;
+      font-family: 'Press Start 2P', cursive;
+    }
+
+    .map-placeholder {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: var(--gray);
+      font-size: 0.45rem;
+      line-height: 2.5;
+    }
+    #modalMap {
+      width: 100%;
+      border-radius: 4px;
+      border: 2px solid var(--bg-panel);
+    }
+    #modalAudio {
+      width: 100%;
+      margin-top: 1rem;
+    }
+
+    .no-results {
+      font-size: 0.5rem;
+      color: var(--gray);
+      text-align: center;
+      padding: 3rem 1rem;
+      line-height: 2.5;
+    }
+
+    /* ============================================================
+       FOOTER
+    ============================================================ */
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      font-size: 0.32rem;
+      color: #4a7aaa;
+      letter-spacing: 2px;
+      border-top: 1px solid #1e3a5f;
+      margin-top: 0.5rem;
+    }
+
+    /* ============================================================
+       RESPONSIVE
+    ============================================================ */
+    @media (max-width: 520px) {
+      /* Header */
+      header { padding: 0.8rem 1rem; min-height: 54px; }
+      .header-light.big { width: 28px; height: 28px; }
+      .header-light.small { width: 10px; height: 10px; }
+
+      /* Nav */
+      nav { gap: 0.4rem; padding: 0.6rem; }
+      nav span { font-size: 0.32rem; padding: 0.35rem 0.45rem; }
+
+      /* Card */
+      .poke-bar { padding: 0.7rem 0.8rem; gap: 0.5rem; }
+      .poke-name { font-size: 0.5rem; }
+      .poke-number { font-size: 0.35rem; }
+      .poke-type-badge { font-size: 0.3rem; }
+      .sprite-wrap { width: 68px; height: 68px; }
+
+      /* Search */
+      .search-bar input { width: 92%; font-size: 0.38rem; }
+      .search-counter { font-size: 0.28rem; }
+
+      /* Modal */
+      .modal-content { width: 95%; }
+      .modal-body { padding: 0.7rem; }
+      #modalImage { width: 90px; height: 90px; }
+      #modalName { font-size: 0.48rem; }
+      #modalDescription { font-size: 0.38rem; line-height: 2; }
+      .modal-tab { font-size: 0.32rem; padding: 0.35rem 0.5rem; }
+      .modal-pokemon-id { font-size: 0.3rem; }
+
+      /* Pagination */
+      .page-number { padding: 0.4rem 0.6rem; font-size: 0.38rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- BOOT SCREEN -->
+  <div id="bootScreen">
+    <div class="boot-logo">
+      <div class="boot-title">POKÉDEX<br>SANGIOSUBA</div>
+      <div class="boot-subtitle">SPECIAL EDITION</div>
+    </div>
+    <div class="boot-bar">
+      <div class="boot-bar-fill"></div>
+    </div>
+    <div class="boot-press">CLICK TO START</div>
+    <div class="boot-copy">© 2024 SANGIOSUBA LABS · ALL RIGHTS RESERVED</div>
+  </div>
+
+  <!-- APP -->
+  <div id="app">
+
+    <header>
+      <div class="header-light big"></div>
+      <div class="header-lights-row">
+        <div class="header-light small reds"></div>
+        <div class="header-light small yellow"></div>
+        <div class="header-light small green"></div>
+      </div>
+      <h1>POKÉDEX SANGIOSUBA</h1>
+    </header>
+
+    <nav id="typeFilter">
+      <span data-type="all" class="active-filter">⊛ ALL</span>
+      <span data-type="suba">🔥 SUBA</span>
+      <span data-type="sangio">💧 SANGIO</span>
+      <span data-type="signorine">❤ SIGNORINE</span>
+      <span data-type="outsider">🌿 OUTSIDER</span>
+    </nav>
+
+    <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="SEARCH NAME OR TYPE...">
+      <div class="search-counter" id="searchCounter">
+        <span id="counterFiltered">19</span> / <span id="counterTotal">19</span> POKÉMON
+      </div>
+    </div>
+
+    <div class="container" id="pokeList"></div>
+    <div class="pagination" id="pagination"></div>
+
+    <footer>SANGIOSUBA POKÉDEX v2.0 · HOENN REGION</footer>
+  </div>
+
+  <!-- MODAL -->
+  <div class="modal" id="pokeModal">
+    <div class="modal-content" id="modalContent">
+      <div class="modal-type-stripe" id="modalStripe"></div>
+      <div class="modal-header">
+        <span class="modal-pokemon-id" id="modalId"></span>
+        <button class="modal-close" id="modalCloseBtn">✕</button>
+      </div>
+      <div class="modal-tabs">
+        <div class="modal-tab active" data-tab="info">INFO</div>
+        <div class="modal-tab" data-tab="map">MAP</div>
+        <div class="modal-tab" data-tab="sound">SOUND</div>
+      </div>
+      <div class="modal-body">
+        <div id="infoTab" class="active">
+          <div class="sprite-screen">
+            <img id="modalImage" src="" alt="" />
+          </div>
+          <p id="modalName"></p>
+          <p id="modalDescription"></p>
+        </div>
+        <div id="mapTab">
+          <div id="mapContent"></div>
+        </div>
+        <div id="soundTab">
+          <audio id="modalAudio" controls></audio>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ============================================================
+    // BOOT SCREEN
+    // ============================================================
+    const bootEl = document.getElementById('bootScreen');
+
+    function dismissBoot() {
+      if (bootEl.classList.contains('fade-out')) return;
+      bootEl.classList.add('fade-out');
+      setTimeout(() => { bootEl.style.display = 'none'; }, 800);
+    }
+
+    setTimeout(dismissBoot, 2800);
+    bootEl.addEventListener('click', dismissBoot);
+    document.addEventListener('keydown', dismissBoot, { once: true });
+
+    // ============================================================
+    // DATI
+    // ============================================================
+    const PLACEHOLDER = 'A strange seed was planted on its back at birth. The plant sprouts and grows with this Pokémon.';
+
+    const TYPE_COLORS = {
+      suba:      '#e63946',
+      sangio:    '#4895ef',
+      signorine: '#f72585',
+      outsider:  '#2dc653',
+    };
+
+    const pokemons = [
+      { id:  1, name: 'Vanacore',      type: 'outsider',  description: PLACEHOLDER,                                               img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/252.png', audio: 'vanacore.mp3',       map: 'vanacore.png' },
+      { id:  2, name: 'Trota',         type: 'sangio',    description: PLACEHOLDER,                                               img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/171.png', audio: 'trota.mp3',          map: 'trota.png' },
+      { id:  3, name: 'Generale',      type: 'outsider',  description: PLACEHOLDER,                                               img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/376.png', audio: 'generale.mp3',       map: 'generale.png' },
+      { id:  4, name: 'Bergantino',    type: 'sangio',    description: PLACEHOLDER,                                               img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/217.png', audio: 'bergantino.mp3',     map: 'bergantino.png' },
+      { id:  5, name: 'Giazzy',        type: 'suba',      description: 'Er PIU MAttoooooooo.',                                    img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/157.png', audio: 'giazzy.mp3',         map: 'giazzy.png' },
+      { id:  6, name: 'Pett',          type: 'suba',      description: 'Obviously prefers hot places. When it rains, steam is said to spout from the tip of its tail.', img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/178.png', audio: 'pett.mp3', map: 'pett.png' },
+      { id:  7, name: 'Gaia',          type: 'signorine', description: 'After birth, its back swells and hardens into a shell. Powerfully sprays foam from its mouth.', img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/7.png', audio: 'audio/squirtle.mp3', map: 'maps/squirtle.png' },
+      { id:  8, name: 'Popa',          type: 'signorine', description: 'When its huge eyes light up, it sings a mysteriously soothing melody that lulls its enemies to sleep.', img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/39.png', audio: 'audio/jigglypuff.mp3', map: 'maps/jigglypuff.png' },
+      { id:  9, name: 'Pompo',         type: 'suba',      description: 'Adores circular objects. Wanders the streets on a nightly basis to look for dropped loose change.', img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/359.png', audio: 'pompa.mp3', map: 'pompa.png' },
+      { id: 10, name: 'MrBigari',      type: 'suba',      description: 'Si narra che MrBigari possieda la peculiare capacità di essere tradito dagli amici più stretti. Tra le altre caratteristiche, psicopatia, depravazione e disciplina, alcuni dicono di averlo visto giurare amore ad una signorina Jigglypuff incontrata in una delle sue notti brave. Dimostra spiccato intelletto quando lontano dalle sostanze psicotrope.', img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/65.png', audio: 'audio/mrbigari.mp3', map: 'maps/mrbigari.png' },
+      { id: 11, name: 'Campagna',      type: 'sangio',    description: 'Loves to build its muscles. It trains in all styles of martial arts to become even stronger.',    img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/352.png', audio: 'campagna.mp3',       map: 'campagna.png' },
+      { id: 12, name: 'Dottore',       type: 'sangio',    description: 'Found in fields and mountains. Mistaking them for boulders, people often step or trip on them.', img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/262.png', audio: 'dottore.mp3',        map: 'dottore.png' },
+      { id: 13, name: 'Ciummellina',   type: 'signorine', description: 'Its genetic code is irregular. It may mutate if it is exposed to radiation from element Stones.', img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/133.png', audio: 'audio/eevee.mp3',    map: 'maps/eevee.png' },
+      { id: 14, name: 'Turpe',         type: 'sangio',    description: 'Turpe (o Luspa per gli amici) è un tipo molto vorace che adora mangiare: può consumare grandi quantità di cibo in una sola volta senza sfamarsi. Differisce dalla sua evoluzione, Maspa, per essere più attivo: tende a giocare a calcetto per polisportive non degne di nota ma qualche volta si immedesima nel Guaje di Porto Alegre.', img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/446.png', audio: 'audio/turpe.mp3', map: 'maps/turpe.png' },
+      { id: 15, name: 'Nanni',         type: 'sangio',    description: PLACEHOLDER,                                               img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/212.png', audio: 'nanni.mp3',          map: 'nanni.png' },
+      { id: 16, name: 'Sveva',         type: 'signorine', description: PLACEHOLDER,                                               img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/255.png', audio: 'sveva.mp3',          map: 'sveva.png' },
+      { id: 17, name: 'Camilla',       type: 'signorine', description: PLACEHOLDER,                                               img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/300.png', audio: 'camilla.mp3',        map: 'camilla.png' },
+      { id: 18, name: 'Sandro Artale', type: 'suba',      description: PLACEHOLDER,                                               img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/107.png', audio: 'artale.mp3',         map: 'artale.png' },
+      { id: 19, name: 'Asietta',       type: 'signorine', description: PLACEHOLDER,                                               img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/229.png', audio: 'asietta.mp3',        map: 'asietta.png' },
+    ];
+
+    // ============================================================
+    // STATO
+    // ============================================================
+    let currentPage = 1;
+    const ITEMS_PER_PAGE = 4;
+    let currentType   = 'all';
+    let currentSearch = '';
+
+    // ============================================================
+    // RENDER
+    // ============================================================
+    function getFiltered() {
+      const q = currentSearch.toLowerCase();
+      return pokemons.filter(p =>
+        (currentType === 'all' || p.type === currentType) &&
+        (p.name.toLowerCase().includes(q) || p.type.toLowerCase().includes(q))
+      );
+    }
+
+    function renderList() {
+      const list = document.getElementById('pokeList');
+      list.innerHTML = '';
+      const filtered  = getFiltered();
+
+      // Aggiorna contatore
+      document.getElementById('counterFiltered').textContent = filtered.length;
+      document.getElementById('counterTotal').textContent    = pokemons.length;
+
+      const start     = (currentPage - 1) * ITEMS_PER_PAGE;
+      const pageItems = filtered.slice(start, start + ITEMS_PER_PAGE);
+
+      if (pageItems.length === 0) {
+        list.innerHTML = '<p class="no-results">NESSUN POKÉMON<br>TROVATO...</p>';
+        renderPagination(0);
+        return;
+      }
+
+      pageItems.forEach((p, i) => {
+        const isPlaceholder = p.description === PLACEHOLDER;
+        const div = document.createElement('div');
+        div.className = 'poke-bar';
+        div.dataset.type = p.type;
+        div.style.animationDelay = `${i * 0.07}s`;
+        div.innerHTML = `
+          <div class="poke-info">
+            <span class="poke-number">#${String(p.id).padStart(3,'0')}</span>
+            <span class="poke-name">${p.name.toUpperCase()}</span>
+            <span class="poke-type-badge">${p.type.toUpperCase()}</span>
+            ${isPlaceholder ? '<span class="placeholder-warning">⚠ TODO</span>' : ''}
+          </div>
+          <div class="sprite-wrap">
+            <img src="${p.img}" alt="${p.name}" loading="lazy" />
+          </div>
+        `;
+        div.addEventListener('click', () => openModal(p));
+        list.appendChild(div);
+      });
+
+      renderPagination(filtered.length);
+    }
+
+    function renderPagination(total) {
+      const pages = Math.ceil(total / ITEMS_PER_PAGE);
+      const pag   = document.getElementById('pagination');
+      pag.innerHTML = '';
+      for (let i = 1; i <= pages; i++) {
+        const btn = document.createElement('button');
+        btn.className = 'page-number' + (i === currentPage ? ' active' : '');
+        btn.textContent = i;
+        btn.addEventListener('click', () => { currentPage = i; renderList(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
+        pag.appendChild(btn);
+      }
+    }
+
+    // ============================================================
+    // FILTRI & SEARCH
+    // ============================================================
+    document.getElementById('typeFilter').addEventListener('click', (e) => {
+      const target = e.target.closest('span[data-type]');
+      if (!target) return;
+      document.querySelectorAll('#typeFilter span').forEach(s => s.classList.remove('active-filter'));
+      target.classList.add('active-filter');
+      currentType = target.dataset.type;
+      currentPage = 1;
+      renderList();
+    });
+
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+      currentSearch = e.target.value;
+      currentPage   = 1;
+      renderList();
+    });
+
+    // ============================================================
+    // MODAL
+    // ============================================================
+    function openModal(pokemon) {
+      // Reset tab
+      document.querySelectorAll('.modal-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.modal-body > div').forEach(d => d.classList.remove('active'));
+      document.querySelector('.modal-tab[data-tab="info"]').classList.add('active');
+      document.getElementById('infoTab').classList.add('active');
+
+      // Colore accent
+      const accent = TYPE_COLORS[pokemon.type] || '#cc0000';
+      document.getElementById('modalStripe').style.background = accent;
+
+      // Popola
+      document.getElementById('modalId').textContent          = `#${String(pokemon.id).padStart(3,'0')} · ${pokemon.type.toUpperCase()}`;
+      document.getElementById('modalImage').src               = pokemon.img;
+      document.getElementById('modalImage').alt               = pokemon.name;
+      document.getElementById('modalName').textContent        = pokemon.name.toUpperCase();
+      document.getElementById('modalDescription').textContent = pokemon.description;
+      document.getElementById('modalAudio').src               = pokemon.audio;
+
+      // Mappa
+      const mapContent = document.getElementById('mapContent');
+      if (pokemon.map) {
+        mapContent.innerHTML = `
+          <img id="modalMap" src="${pokemon.map}" alt="Mappa ${pokemon.name}"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='block';" />
+          <div class="map-placeholder" style="display:none;">🗺️ MAPPA NON<br>DISPONIBILE</div>`;
+      } else {
+        mapContent.innerHTML = `<div class="map-placeholder">🗺️ MAPPA NON<br>DISPONIBILE</div>`;
+      }
+
+      document.getElementById('pokeModal').style.display = 'flex';
+    }
+
+    function closeModal() {
+      document.getElementById('pokeModal').style.display = 'none';
+      document.getElementById('modalAudio').pause();
+    }
+
+    document.getElementById('pokeModal').addEventListener('click', (e) => {
+      if (e.target.id === 'pokeModal') closeModal();
+    });
+    document.getElementById('modalCloseBtn').addEventListener('click', closeModal);
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+
+    document.querySelectorAll('.modal-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.modal-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.modal-body > div').forEach(d => d.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById(tab.dataset.tab + 'Tab').classList.add('active');
+      });
+    });
+
+    // ============================================================
+    // INIT
+    // ============================================================
+    renderList();
+  </script>
+</body>
+</html>
