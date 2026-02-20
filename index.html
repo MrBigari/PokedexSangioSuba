@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pokédex SangioSuba</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='%23cc0000' stroke='%23000' stroke-width='4'/%3E%3Ccircle cx='50' cy='50' r='48' fill='none' stroke='%23000' stroke-width='4'/%3E%3Crect x='2' y='46' width='96' height='8' fill='%23000'/%3E%3Ccircle cx='50' cy='50' r='12' fill='%23fff' stroke='%23000' stroke-width='4'/%3E%3Ccircle cx='50' cy='50' r='6' fill='%23ddd'/%3E%3Cpath d='M2 50 Q2 4 50 4 Q98 4 98 50' fill='%23cc0000'/%3E%3Cpath d='M2 50 Q2 96 50 96 Q98 96 98 50' fill='%23fff'/%3E%3Crect x='2' y='46' width='96' height='8' fill='%23000'/%3E%3Ccircle cx='50' cy='50' r='12' fill='%23fff' stroke='%23000' stroke-width='4'/%3E%3Ccircle cx='50' cy='50' r='5' fill='%23ccc'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <style>
     /* ============================================================
@@ -64,8 +67,9 @@
 
     .boot-logo {
       text-align: center;
-      animation: bootAppear 0.6s steps(1) 0.3s both;
+      animation: bootAppear 0.6s steps(1) 0.8s both;
       opacity: 0;
+      font-family: 'Press Start 2P', monospace, cursive;
     }
     @keyframes bootAppear { to { opacity: 1; } }
 
@@ -258,6 +262,22 @@
       align-items: center;
       gap: 0.8rem;
       padding: 1rem;
+    }
+
+    /* Transizione pagina */
+    .container.page-exit {
+      animation: pageExit 0.18s ease forwards;
+    }
+    .container.page-enter {
+      animation: pageEnter 0.25s ease forwards;
+    }
+    @keyframes pageExit {
+      from { opacity: 1; transform: translateX(0); }
+      to   { opacity: 0; transform: translateX(-20px); }
+    }
+    @keyframes pageEnter {
+      from { opacity: 0; transform: translateX(20px); }
+      to   { opacity: 1; transform: translateX(0); }
     }
 
     .poke-bar {
@@ -559,10 +579,24 @@
        RESPONSIVE
     ============================================================ */
     @media (max-width: 520px) {
-      /* Header */
-      header { padding: 0.8rem 1rem; min-height: 54px; }
-      .header-light.big { width: 28px; height: 28px; }
-      .header-light.small { width: 10px; height: 10px; }
+      /* Header - titolo su riga separata, luci a sinistra */
+      header {
+        padding: 0.6rem 1rem;
+        flex-wrap: wrap;
+        min-height: unset;
+      }
+      header h1 {
+        position: static;
+        width: 100%;
+        order: 3;
+        font-size: 0.42rem;
+        padding-top: 0.4rem;
+        border-top: 1px solid rgba(255,255,255,0.15);
+        margin-top: 0.3rem;
+        pointer-events: auto;
+      }
+      .header-light.big { width: 26px; height: 26px; }
+      .header-light.small { width: 9px; height: 9px; }
 
       /* Nav */
       nav { gap: 0.4rem; padding: 0.6rem; }
@@ -792,9 +826,23 @@
         const btn = document.createElement('button');
         btn.className = 'page-number' + (i === currentPage ? ' active' : '');
         btn.textContent = i;
-        btn.addEventListener('click', () => { currentPage = i; renderList(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
+        btn.addEventListener('click', () => goToPage(i));
         pag.appendChild(btn);
       }
+    }
+
+    function goToPage(num) {
+      if (num === currentPage) return;
+      const container = document.getElementById('pokeList');
+      container.classList.add('page-exit');
+      setTimeout(() => {
+        container.classList.remove('page-exit');
+        currentPage = num;
+        renderList();
+        container.classList.add('page-enter');
+        container.addEventListener('animationend', () => container.classList.remove('page-enter'), { once: true });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, 180);
     }
 
     // ============================================================
