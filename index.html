@@ -562,55 +562,6 @@
       padding: 3rem 1rem;
       line-height: 2.5;
     }
-
-    /* ===== STATS ===== */
-    .stats-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 0.8rem;
-      padding: 0.5rem 0;
-    }
-    .stat-row {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-    }
-    .stat-label {
-      font-size: 0.35rem;
-      color: var(--gray);
-      width: 90px;
-      flex-shrink: 0;
-      letter-spacing: 0.5px;
-    }
-    .stat-bar-wrap {
-      flex: 1;
-      height: 10px;
-      background: #0a1628;
-      border: 1px solid #1e3a5f;
-      border-radius: 2px;
-      overflow: hidden;
-    }
-    .stat-bar-fill {
-      height: 100%;
-      border-radius: 2px;
-      width: 0%;
-      transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-    }
-    .stat-value {
-      font-size: 0.38rem;
-      color: var(--white);
-      width: 28px;
-      text-align: right;
-      flex-shrink: 0;
-    }
-
-    /* ===== MOSSE ===== */
-    .mosse-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 0.8rem;
-      padding: 0.5rem 0;
-    }
     .mossa-card {
       border: 2px solid var(--modal-accent, #555);
       border-radius: 4px;
@@ -703,8 +654,8 @@
     <div class="boot-bar">
       <div class="boot-bar-fill"></div>
     </div>
-    <div class="boot-press">CLICK TO START</div>
-    <div class="boot-copy">© 2024 SANGIOSUBA LABS · ALL RIGHTS RESERVED</div>
+    <div class="boot-press">STO CUCINANDO</div>
+    <div class="boot-copy">© 2026 MRBIGARI KITCHEN · ALL RIGHTS RESERVED</div>
   </div>
 
   <!-- APP -->
@@ -738,7 +689,7 @@
     <div class="container" id="pokeList"></div>
     <div class="pagination" id="pagination"></div>
 
-    <footer>SANGIOSUBA POKÉDEX v2.0 · HOENN REGION</footer>
+    <footer>SANGIOSUBA POKÉDEX v2.0 · LIMITED EDITION</footer>
   </div>
 
   <!-- MODAL -->
@@ -751,8 +702,6 @@
       </div>
       <div class="modal-tabs">
         <div class="modal-tab active" data-tab="info">INFO</div>
-        <div class="modal-tab" data-tab="stats">STATS</div>
-        <div class="modal-tab" data-tab="mosse">MOSSE</div>
         <div class="modal-tab" data-tab="map">MAP</div>
         <div class="modal-tab" data-tab="sound">SOUND</div>
       </div>
@@ -770,11 +719,6 @@
         <div id="soundTab">
           <audio id="modalAudio" controls></audio>
         </div>
-        <div id="statsTab">
-          <div class="stats-grid" id="statsGrid"></div>
-        </div>
-        <div id="mosseTab">
-          <div class="mosse-grid" id="mosseGrid"></div>
         </div>
       </div>
     </div>
@@ -809,32 +753,32 @@
     };
 
     const pokemons = [
-      { id:  1, name: 'Vanacore', tabs: ['info', 'stats', 'mosse', 'map', 'sound'],      type: 'outsider',  stats: { simpatia: 60, affidabilita: 70, forza: 50, astuzia: 65 }, mosse: [{ nome: 'MOSSA 1', tipo: 'outsider' }, { nome: 'MOSSA 2', tipo: 'outsider' }],  description: PLACEHOLDER,                                               img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/253.png', audio: 'vanacore.mp3',       map: 'vanacore.png' },
-      { id:  2, name: 'Trota', tabs: ['info', 'stats', 'mosse', 'map', 'sound'],         type: 'sangio',    stats: { simpatia: 70, affidabilita: 60, forza: 65, astuzia: 55 }, mosse: [{ nome: 'MOSSA 1', tipo: 'sangio' }, { nome: 'MOSSA 2', tipo: 'sangio' }],    description: PLACEHOLDER,                                               img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/171.png', audio: 'trota.mp3',          map: 'trota.png' },
-      { id:  3, name: 'Generale', tabs: ['info', 'stats', 'mosse', 'map', 'sound'],      type: 'outsider',  stats: { simpatia: 55, affidabilita: 80, forza: 75, astuzia: 70 }, mosse: [{ nome: 'MOSSA 1', tipo: 'outsider' }, { nome: 'MOSSA 2', tipo: 'outsider' }],  description: PLACEHOLDER,                                               img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/376.png', audio: 'generale.mp3',       map: 'generale.png' },
-      { id:  4, name: 'Bergantino', tabs: ['info', 'stats', 'mosse', 'map', 'sound'],    type: 'sangio',    stats: { simpatia: 65, affidabilita: 75, forza: 80, astuzia: 60 }, mosse: [{ nome: 'MOSSA 1', tipo: 'sangio' }, { nome: 'MOSSA 2', tipo: 'sangio' }],    description: PLACEHOLDER,                                               img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/217.png', audio: 'bergantino.mp3',     map: 'bergantino.png' },
-      { id:  5, name: 'Giazzy', tabs: ['info', 'stats', 'mosse', 'map', 'sound'],        type: 'suba',      stats: { simpatia: 90, affidabilita: 40, forza: 70, astuzia: 55 }, mosse: [{ nome: 'MOSSA 1', tipo: 'suba' }, { nome: 'MOSSA 2', tipo: 'suba' }],      description: 'Er PIU MAttoooooooo.',                                    img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/157.png', audio: 'giazzy.mp3',         map: 'giazzy.png' },
-      { id:  6, name: 'Pett', tabs: ['info', 'stats', 'mosse', 'map', 'sound'],          type: 'suba',      stats: { simpatia: 75, affidabilita: 65, forza: 60, astuzia: 70 }, mosse: [{ nome: 'MOSSA 1', tipo: 'suba' }, { nome: 'MOSSA 2', tipo: 'suba' }],      description: 'Obviously prefers hot places. When it rains, steam is said to spout from the tip of its tail.', img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/178.png', audio: 'pett.mp3', map: 'pett.png' },
-      { id:  7, name: 'Gaia', tabs: ['info', 'stats', 'mosse', 'map', 'sound'],          type: 'signorine', stats: { simpatia: 85, affidabilita: 70, forza: 50, astuzia: 75 }, mosse: [{ nome: 'MOSSA 1', tipo: 'signorine' }, { nome: 'MOSSA 2', tipo: 'signorine' }], description: 'After birth, its back swells and hardens into a shell. Powerfully sprays foam from its mouth.', img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/7.png', audio: 'audio/squirtle.mp3', map: 'maps/squirtle.png' },
-      { id:  8, name: 'Popa', tabs: ['info', 'stats', 'mosse', 'map', 'sound'],          type: 'signorine', stats: { simpatia: 90, affidabilita: 65, forza: 45, astuzia: 80 }, mosse: [{ nome: 'MOSSA 1', tipo: 'signorine' }, { nome: 'MOSSA 2', tipo: 'signorine' }], description: 'When its huge eyes light up, it sings a mysteriously soothing melody that lulls its enemies to sleep.', img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/39.png', audio: 'audio/jigglypuff.mp3', map: 'maps/jigglypuff.png' },
-      { id:  9, name: 'Pompo', tabs: ['info', 'stats', 'mosse', 'map', 'sound'],         type: 'suba',      stats: { simpatia: 80, affidabilita: 55, forza: 65, astuzia: 60 }, mosse: [{ nome: 'MOSSA 1', tipo: 'suba' }, { nome: 'MOSSA 2', tipo: 'suba' }],      description: 'Adores circular objects. Wanders the streets on a nightly basis to look for dropped loose change.', img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/359.png', audio: 'pompa.mp3', map: 'pompa.png' },
-      { id: 10, name: 'MrBigari', tabs: ['info', 'stats', 'mosse', 'map', 'sound'],      type: 'suba',      stats: { simpatia: 70, affidabilita: 30, forza: 75, astuzia: 90 }, mosse: [{ nome: 'TRADIMENTO', tipo: 'suba' }, { nome: 'PSICOPATIA', tipo: 'suba' }],      description: 'Si narra che MrBigari possieda la peculiare capacità di essere tradito dagli amici più stretti. Tra le altre caratteristiche, psicopatia, depravazione e disciplina, alcuni dicono di averlo visto giurare amore ad una signorina Jigglypuff incontrata in una delle sue notti brave. Dimostra spiccato intelletto quando lontano dalle sostanze psicotrope.', img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/65.png', audio: 'audio/mrbigari.mp3', map: 'maps/mrbigari.png' },
-      { id: 11, name: 'Campagna', tabs: ['info', 'stats', 'mosse', 'map', 'sound'],      type: 'sangio',    stats: { simpatia: 70, affidabilita: 70, forza: 90, astuzia: 60 }, mosse: [{ nome: 'MOSSA 1', tipo: 'sangio' }, { nome: 'MOSSA 2', tipo: 'sangio' }],    description: 'Loves to build its muscles. It trains in all styles of martial arts to become even stronger.',    img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/352.png', audio: 'campagna.mp3',       map: 'campagna.png' },
-      { id: 12, name: 'Dottore', tabs: ['info', 'stats', 'mosse', 'map', 'sound'],       type: 'sangio',    stats: { simpatia: 65, affidabilita: 80, forza: 55, astuzia: 85 }, mosse: [{ nome: 'MOSSA 1', tipo: 'sangio' }, { nome: 'MOSSA 2', tipo: 'sangio' }],    description: 'Found in fields and mountains. Mistaking them for boulders, people often step or trip on them.', img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/262.png', audio: 'dottore.mp3',        map: 'dottore.png' },
-      { id: 13, name: 'Ciummellina', tabs: ['info', 'stats', 'mosse', 'map', 'sound'],   type: 'signorine', stats: { simpatia: 88, affidabilita: 72, forza: 48, astuzia: 78 }, mosse: [{ nome: 'MOSSA 1', tipo: 'signorine' }, { nome: 'MOSSA 2', tipo: 'signorine' }], description: 'Its genetic code is irregular. It may mutate if it is exposed to radiation from element Stones.', img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/133.png', audio: 'audio/eevee.mp3',    map: 'maps/eevee.png' },
-      { id: 14, name: 'Turpe', tabs: ['info', 'stats', 'mosse', 'map', 'sound'],         type: 'sangio',    stats: { simpatia: 75, affidabilita: 60, forza: 80, astuzia: 55 }, mosse: [{ nome: 'CALCETTO', tipo: 'sangio' }, { nome: 'ABBUFFATA', tipo: 'sangio' }],    description: 'Turpe (o Luspa per gli amici) è un tipo molto vorace che adora mangiare: può consumare grandi quantità di cibo in una sola volta senza sfamarsi. Differisce dalla sua evoluzione, Maspa, per essere più attivo: tende a giocare a calcetto per polisportive non degne di nota ma qualche volta si immedesima nel Guaje di Porto Alegre.', img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/446.png', audio: 'audio/turpe.mp3', map: 'maps/turpe.png' },
-      { id: 15, name: 'Nanni', tabs: ['info', 'stats', 'mosse', 'map', 'sound'],         type: 'sangio',    stats: { simpatia: 68, affidabilita: 74, forza: 62, astuzia: 66 }, mosse: [{ nome: 'MOSSA 1', tipo: 'sangio' }, { nome: 'MOSSA 2', tipo: 'sangio' }],    description: PLACEHOLDER,                                               img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/212.png', audio: 'nanni.mp3',          map: 'nanni.png' },
+      { id:  1, name: 'Vanacore', tabs: ['info', 'map', 'sound'],      type: 'outsider',  stats: { simpatia: 60, affidabilita: 70, forza: 50, astuzia: 65 }, mosse: [{ nome: 'MOSSA 1', tipo: 'outsider' }, { nome: 'MOSSA 2', tipo: 'outsider' }],  description: "Vanacore (o Vanaculo per gli amici) è un pokémon molto particolare. Un tempo lo si trovava ramingo per le zone di Roma centro con insolite sigarette 'alle erbe'. Da quando è migrato nel suo nuovo habitat si fa vedere sempre meno. Alcuni dicono sia nei suoi nidi a farmare aura, altri che oramai sia diventato un bel PokéBollito.",                                               img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/253.png', audio: 'vanacore.mp3',       map: 'vanacore.png' },
+      { id:  2, name: 'Trota', tabs: ['info', 'map', 'sound'],         type: 'sangio',    stats: { simpatia: 70, affidabilita: 60, forza: 65, astuzia: 55 }, mosse: [{ nome: 'MOSSA 1', tipo: 'sangio' }, { nome: 'MOSSA 2', tipo: 'sangio' }],    description: "Trota è un classico esempio di pokemon surgelato, capace di sguazzare e dimenarsi senza un vero obiettivo di fondo. Stupisce la potenza muscolare dei suoi pinnapolpacci e la natura benevola. Questa è ben dimostrata soprattutto nei confronti di un piccolo Swinub della Ciociaria.",                                               img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/171.png', audio: 'trota.mp3',          map: 'trota.png' },
+      { id:  3, name: 'Generale', tabs: ['info', 'map', 'sound'],      type: 'outsider',  stats: { simpatia: 55, affidabilita: 80, forza: 75, astuzia: 70 }, mosse: [{ nome: 'MOSSA 1', tipo: 'outsider' }, { nome: 'MOSSA 2', tipo: 'outsider' }],  description: "Un Pokémon molto altezzoso, i suoi fan parlano spesso delle dimensioni del gioiello che ha sulla testa (e non solo). Sebbene molto amato, è difficile addomesticarlo per la volubile crudeltà, ma può sorprendere quando è nel giusto habitat. Un tempo si narra avesse una seconda personalità molto forte, ma sembra ormai averci fatto i conti in maniera definitiva.",                                               img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/53.png', audio: 'generale.mp3',       map: 'generale.png' },
+      { id:  4, name: 'Bergantino', tabs: ['info', 'map', 'sound'],    type: 'sangio',    stats: { simpatia: 65, affidabilita: 75, forza: 80, astuzia: 60 }, mosse: [{ nome: 'MOSSA 1', tipo: 'sangio' }, { nome: 'MOSSA 2', tipo: 'sangio' }],    description: "La leggenda narra che nelle foreste dove è cresciuto Mr. Bergantino, lui insultasse la maggior parte dei pokemon. Nonostante questo, tiene molto ai pochi affetti che si sceglie e si dice abbia percorso chilometri per rivedere la sua dolce metà quando lei fu costretta ad emigrare. Molto spesso manca di tatto e fino a poco tempo fa era accostato a discutibili movimenti politici con la zampa alzata.",                                               img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/217.png', audio: 'bergantino.mp3',     map: 'bergantino.png' },
+      { id:  5, name: 'Giazzy', tabs: ['info', 'map', 'sound'],        type: 'suba',      stats: { simpatia: 90, affidabilita: 40, forza: 70, astuzia: 55 }, mosse: [{ nome: 'MOSSA 1', tipo: 'suba' }, { nome: 'MOSSA 2', tipo: 'suba' }],      description: "Di esemplari di Piuma (grazie al cielo) non se ne trovano molti. Sebbene facilmente infiammabile, dà tutto sé stesso alle persone che si mostrano gentili con lui. Negli ultimi tempi, lo si vede sempre svagarsi per i laghi della regione con la sua Sharpedo, una coppia piuttosto ardente.",                                    img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/157.png', audio: 'giazzy.mp3',         map: 'Cinecittà.png' },
+      { id:  6, name: 'Pett', tabs: ['info', 'map', 'sound'],          type: 'suba',      stats: { simpatia: 75, affidabilita: 65, forza: 60, astuzia: 70 }, mosse: [{ nome: 'MOSSA 1', tipo: 'suba' }, { nome: 'MOSSA 2', tipo: 'suba' }],      description: "Pett è noto per la sua freddezza sotto porta quando gioca con i suoi compagni di merende. Alcuni lo considerano un dottore dei piedi, ma i più sostengono che sia in grado di prevedere il futuro (o almeno il Fantacalcio). Da qualche anno è migrato verso le prateria in compagnia di una piccola Bellossom.", img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/178.png', audio: 'pett.mp3', map: 'Cinecittà.png' },
+      { id:  7, name: 'Gaia', tabs: ['info', 'map', 'sound'],          type: 'signorine', stats: { simpatia: 85, affidabilita: 70, forza: 50, astuzia: 75 }, mosse: [{ nome: 'MOSSA 1', tipo: 'signorine' }, { nome: 'MOSSA 2', tipo: 'signorine' }], description: 'After birth, its back swells and hardens into a shell. Powerfully sprays foam from its mouth.', img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/7.png', audio: 'audio/squirtle.mp3', map: 'Cinecittà.png' },
+      { id:  8, name: 'Popa', tabs: ['info', 'map', 'sound'],          type: 'signorine', stats: { simpatia: 90, affidabilita: 65, forza: 45, astuzia: 80 }, mosse: [{ nome: 'MOSSA 1', tipo: 'signorine' }, { nome: 'MOSSA 2', tipo: 'signorine' }], description: "Popa si può trovare negli asili nido della regione. È una bravissima maestra che usa i suoi dolci occhi tondi per intonare una melodia che spinge i cuccioli ad addormentarsi. Un pochino irascibile, se infastidita tende a gonfiarsi e diventare molto arrabbiata. Ultimamente la si vede in compagnia di un Alakazam, sembrano tanto innamorati.", img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/39.png', audio: 'audio/jigglypuff.mp3', map: 'maps/jigglypuff.png' },
+      { id:  9, name: 'Pompo', tabs: ['info', 'map', 'sound'],         type: 'suba',      stats: { simpatia: 80, affidabilita: 55, forza: 65, astuzia: 60 }, mosse: [{ nome: 'MOSSA 1', tipo: 'suba' }, { nome: 'MOSSA 2', tipo: 'suba' }],      description: "Pompo ha una fortuna innata che lo consente di predire in anticipo vere e proprie catastrofi naturali. Vive negli ambienti montani più aspri e inospitali. Soltanto raramente si allontana dalle montagne per avventurarsi a valle. Essendo molto fortunati, i Pompa sono piuttosto longevi, infatti, si stima possano vivere fino a cent'anni.", img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/359.png', audio: 'pompa.mp3', map: 'Cinecittà.png' },
+      { id: 10, name: 'MrBigari', tabs: ['info', 'map', 'sound'],      type: 'suba',      stats: { simpatia: 70, affidabilita: 30, forza: 75, astuzia: 90 }, mosse: [{ nome: 'TRADIMENTO', tipo: 'suba' }, { nome: 'PSICOPATIA', tipo: 'suba' }],      description: 'Si narra che MrBigari possieda la peculiare capacità di essere tradito dagli amici più stretti. Tra le altre caratteristiche, psicopatia, depravazione e disciplina, alcuni dicono di averlo visto giurare amore ad una signorina Jigglypuff incontrata in una delle sue notti brave. Dimostra spiccato intelletto quando lontano dalle sostanze psicotrope.', img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/65.png', audio: 'audio/mrbigari.mp3', map: 'Cinecittà.png' },
+      { id: 11, name: 'Campagna', tabs: ['info', 'map', 'sound'],      type: 'sangio',    stats: { simpatia: 70, affidabilita: 70, forza: 90, astuzia: 60 }, mosse: [{ nome: 'MOSSA 1', tipo: 'sangio' }, { nome: 'MOSSA 2', tipo: 'sangio' }],    description: "I Campagna variano la colorazione del proprio corpo per mimetizzarsi con l'ambiente circostante, garantendogli un atteggiamento macchiavellico. Spesso intrappolato negli intermediari finanziari in cui lavora, l'estate si dedica alla caccia di femmine grazie alla sua lunga lingua che non lascia scampo.",    img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/352.png', audio: 'campagna.mp3',       map: 'campagna.png' },
+      { id: 12, name: 'Dottore', tabs: ['info', 'map', 'sound'],       type: 'sangio',    stats: { simpatia: 65, affidabilita: 80, forza: 55, astuzia: 85 }, mosse: [{ nome: 'MOSSA 1', tipo: 'sangio' }, { nome: 'MOSSA 2', tipo: 'sangio' }],    description: "Allo stato brado il Dottore si sposta e agisce soltanto assieme al suo branco nelle zone di San Giovanni. A causa della sua natura molto selvatica si trova a suo agio solo con pokemon che considera suoi pari, salvo poi uscire e rientrare spesso dai gruppi Whatsapp. Nonostante ciò sembra molto empatico con i suoi cari, alcuni dicono sia anche imprevedibile spalle alla porta.", img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/262.png', audio: 'dottore.mp3',        map: 'dottore.png' },
+      { id: 13, name: 'Ciummellina', tabs: ['info', 'map', 'sound'],   type: 'signorine', stats: { simpatia: 88, affidabilita: 72, forza: 48, astuzia: 78 }, mosse: [{ nome: 'MOSSA 1', tipo: 'signorine' }, { nome: 'MOSSA 2', tipo: 'signorine' }], description: "Ciummelina è dotata di un instabile corredo genetico che muta in base all'habitat naturale in cui è integrata. A seconda del rapporto con lei, mostrerà atteggiamenti totalmente diversi tra loro, perciò guai a farla arrabbiare. Da diversi anni è sempre in compagnia del suo Machamp preferito, uno spettacolo vederli assieme.", img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/133.png', audio: 'audio/eevee.mp3',    map: 'maps/eevee.png' },
+      { id: 14, name: 'Turpe', tabs: ['info', 'map', 'sound'],         type: 'sangio',    stats: { simpatia: 75, affidabilita: 60, forza: 80, astuzia: 55 }, mosse: [{ nome: 'CALCETTO', tipo: 'sangio' }, { nome: 'ABBUFFATA', tipo: 'sangio' }],    description: "Turpe (o Luspa per gli amici) è un tipo molto vorace che adora mangiare: può consumare grandi quantità di cibo in una sola volta senza sfamarsi. Differisce dalla sua evoluzione, Maspa, per essere più attivo: tende a giocare a calcetto per polisportive degne di nota e per farlo si trasforma nel Guaje di Porto Alegre.", img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/446.png', audio: 'audio/turpe.mp3', map: 'maps/turpe.png' },
+      { id: 15, name: 'Nanni', tabs: ['info', 'map', 'sound'],         type: 'sangio',    stats: { simpatia: 68, affidabilita: 74, forza: 62, astuzia: 66 }, mosse: [{ nome: 'MOSSA 1', tipo: 'sangio' }, { nome: 'MOSSA 2', tipo: 'sangio' }],    description: "Il cuore di Nanni è duro come l'acciaio. Le normali sollecitazioni non riescono neanche a scalfirlo. Le grandi ali che ha, servono per trappare nei momenti di necessità. Tende ad avere una natura schiva con la maggior parte degli altri pokemon ma si vocifera che qualche tempo fa abbia perso la testa per un esemplare di Torchic.",                                               img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/212.png', audio: 'nanni.mp3',          map: 'nanni.png' },
       { id: 16, name: 'Sveva', tabs: ['info', 'map', 'sound'],         type: 'signorine', stats: { simpatia: 82, affidabilita: 68, forza: 52, astuzia: 76 }, mosse: [{ nome: 'MOSSA 1', tipo: 'signorine' }, { nome: 'MOSSA 2', tipo: 'signorine' }], description: PLACEHOLDER,                                               img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/255.png', audio: 'sveva.mp3',          map: 'sveva.png' },
       { id: 17, name: 'Camilla', tabs: ['info', 'map', 'sound'],       type: 'signorine', stats: { simpatia: 86, affidabilita: 66, forza: 44, astuzia: 82 }, mosse: [{ nome: 'MOSSA 1', tipo: 'signorine' }, { nome: 'MOSSA 2', tipo: 'signorine' }], description: PLACEHOLDER,                                               img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/300.png', audio: 'camilla.mp3',        map: 'camilla.png' },
-      { id: 18, name: 'Sandro Artale', tabs: ['info', 'stats', 'mosse', 'map', 'sound'], type: 'suba',      stats: { simpatia: 72, affidabilita: 58, forza: 68, astuzia: 64 }, mosse: [{ nome: 'MOSSA 1', tipo: 'suba' }, { nome: 'MOSSA 2', tipo: 'suba' }],      description: PLACEHOLDER,                                               img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/107.png', audio: 'artale.mp3',         map: 'artale.png' },
-      { id: 19, name: 'Asietta', tabs: ['info', 'map', 'sound'],       type: 'signorine', stats: { simpatia: 84, affidabilita: 69, forza: 46, astuzia: 79 }, mosse: [{ nome: 'MOSSA 1', tipo: 'signorine' }, { nome: 'MOSSA 2', tipo: 'signorine' }], description: PLACEHOLDER,                                               img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/229.png', audio: 'asietta.mp3',        map: 'asietta.png' },
+      { id: 18, name: 'Sandro Artale', tabs: ['info', 'map', 'sound'], type: 'suba',      stats: { simpatia: 72, affidabilita: 58, forza: 68, astuzia: 64 }, mosse: [{ nome: 'MOSSA 1', tipo: 'suba' }, { nome: 'MOSSA 2', tipo: 'suba' }],      description: "Si dice che Sandro Artale abbia l'animo di un pugile destinato al campionato mondiale. Questo pokemon ha uno spirito indomito e non demorde mai di fronte a nulla, neanche alle strette di mano. Negli ultimi anni ha riscoperto dolcezza e amore dopo aver incontrato una femmina di Houndoom.",                                               img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/107.png', audio: 'artale.mp3',         map: 'Cinecittà.png' },
+      { id: 19, name: 'Asietta', tabs: ['info', 'map', 'sound'],       type: 'signorine', stats: { simpatia: 84, affidabilita: 69, forza: 46, astuzia: 79 }, mosse: [{ nome: 'MOSSA 1', tipo: 'signorine' }, { nome: 'MOSSA 2', tipo: 'signorine' }], description: PLACEHOLDER,                                               img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/229.png', audio: 'asietta.mp3',        map: 'Cinecittà.png' },
 
-      { id: 20, name: 'Giadina',       tabs: ['info', 'map', 'sound'], type: 'signorine', stats: { simpatia: 70, affidabilita: 70, forza: 50, astuzia: 70 }, mosse: [{ nome: 'MOSSA 1', tipo: 'signorine' }, { nome: 'MOSSA 2', tipo: 'signorine' }], description: PLACEHOLDER, img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/182.png', audio: 'giadina.mp3', map: 'giadina.png' },
-      { id: 21, name: 'Ciummello',     tabs: ['info', 'stats', 'mosse', 'map', 'sound'], type: 'suba',      stats: { simpatia: 70, affidabilita: 70, forza: 70, astuzia: 70 }, mosse: [{ nome: 'MOSSA 1', tipo: 'suba' }, { nome: 'MOSSA 2', tipo: 'suba' }], description: PLACEHOLDER, img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/68.png', audio: 'ciummello.mp3', map: 'ciummello.png' },
+      { id: 20, name: 'Giadina',       tabs: ['info', 'map', 'sound'], type: 'signorine', stats: { simpatia: 70, affidabilita: 70, forza: 50, astuzia: 70 }, mosse: [{ nome: 'MOSSA 1', tipo: 'signorine' }, { nome: 'MOSSA 2', tipo: 'signorine' }], description: PLACEHOLDER, img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/182.png', audio: 'giadina.mp3', map: 'Cinecittà.png' },
+      { id: 21, name: 'Ciummello',     tabs: ['info', 'map', 'sound'], type: 'suba',      stats: { simpatia: 70, affidabilita: 70, forza: 70, astuzia: 70 }, mosse: [{ nome: 'MOSSA 1', tipo: 'suba' }, { nome: 'MOSSA 2', tipo: 'suba' }], description: "Ciummello combatte tutta la settimana per aiutare i colleghi a formarsi adeguatamente. Nei giorni di riposo, si reca in campagna per godersi un po' di spensieratezza con la sua Eevee. Alcuni studiosi sostengono sia un pokemon molto permaloso, ma il suo cuore tenero gli fa perdonare qualsiasi fragilità, capogruppo nato.", img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/68.png', audio: 'ciummello.mp3', map: 'ciummello.png' },
       { id: 22, name: 'Matilde',       tabs: ['info', 'map', 'sound'], type: 'signorine', stats: { simpatia: 70, affidabilita: 70, forza: 50, astuzia: 70 }, mosse: [{ nome: 'MOSSA 1', tipo: 'signorine' }, { nome: 'MOSSA 2', tipo: 'signorine' }], description: PLACEHOLDER, img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/134.png', audio: 'matilde.mp3', map: 'matilde.png' },
-      { id: 23, name: 'Manuel',        tabs: ['info', 'stats', 'mosse', 'map', 'sound'], type: 'outsider',  stats: { simpatia: 70, affidabilita: 70, forza: 70, astuzia: 70 }, mosse: [{ nome: 'MOSSA 1', tipo: 'outsider' }, { nome: 'MOSSA 2', tipo: 'outsider' }], description: PLACEHOLDER, img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/310.png', audio: 'manuel.mp3', map: 'manuel.png' },
+      { id: 23, name: 'Manuel',        tabs: ['info', 'map', 'sound'], type: 'outsider',  stats: { simpatia: 70, affidabilita: 70, forza: 70, astuzia: 70 }, mosse: [{ nome: 'MOSSA 1', tipo: 'outsider' }, { nome: 'MOSSA 2', tipo: 'outsider' }], description: "Nonostante le evidenti differenze, lui si crede un giaguaro e mostra un debole per le aquile. Un tempo smerciava capi d'abbigliamento dalla dubbia provenienza, oggi solca i cieli come assistente di volo. La sua vita sembra migliorata da quando è arrivata una Vaporeon nella sua vita, sembra anche meno rompiscatole ma resta un laziale irriducibile.", img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/310.png', audio: 'manuel.mp3', map: 'manuel.png' },
       { id: 24, name: 'Frapo',         tabs: ['info', 'map', 'sound'], type: 'signorine', stats: { simpatia: 70, affidabilita: 70, forza: 50, astuzia: 70 }, mosse: [{ nome: 'MOSSA 1', tipo: 'signorine' }, { nome: 'MOSSA 2', tipo: 'signorine' }], description: PLACEHOLDER, img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/319.png', audio: 'frapo.mp3', map: 'frapo.png' },
-      { id: 25, name: 'Tabba',         tabs: ['info', 'stats', 'mosse', 'map', 'sound'], type: 'outsider',  stats: { simpatia: 70, affidabilita: 70, forza: 70, astuzia: 70 }, mosse: [{ nome: 'MOSSA 1', tipo: 'outsider' }, { nome: 'MOSSA 2', tipo: 'outsider' }], description: PLACEHOLDER, img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/181.png', audio: 'tabba.mp3', map: 'tabba.png' },
+      { id: 25, name: 'Tabba',         tabs: ['info', 'map', 'sound'], type: 'outsider',  stats: { simpatia: 70, affidabilita: 70, forza: 70, astuzia: 70 }, mosse: [{ nome: 'MOSSA 1', tipo: 'outsider' }, { nome: 'MOSSA 2', tipo: 'outsider' }], description: "Tabba si è evoluto con l'esposizione al potere dell'amicizia. Di natura docile si mette sempre a disposizione del gruppo se chiamato in causa. Sebbene innocuo all'apparenza, quando cala la notte e iniziano le danze, i pokemon dell'altro sesso rimangono preda del suo charme irresistibile.", img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/181.png', audio: 'tabba.mp3', map: 'tabba.png' },
       { id: 26, name: 'Giuls',         tabs: ['info', 'map', 'sound'], type: 'signorine', stats: { simpatia: 70, affidabilita: 70, forza: 50, astuzia: 70 }, mosse: [{ nome: 'MOSSA 1', tipo: 'signorine' }, { nome: 'MOSSA 2', tipo: 'signorine' }], description: PLACEHOLDER, img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/220.png', audio: 'giuls.mp3', map: 'giuls.png' },
       { id: 27, name: 'Mimmo',         tabs: ['info', 'map', 'sound'], type: 'signorine', stats: { simpatia: 70, affidabilita: 70, forza: 50, astuzia: 70 }, mosse: [{ nome: 'MOSSA 1', tipo: 'signorine' }, { nome: 'MOSSA 2', tipo: 'signorine' }], description: PLACEHOLDER, img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/27.png', audio: 'mimmo.mp3', map: 'mimmo.png' },
     ];
@@ -989,51 +933,6 @@
       } else {
         mapContent.innerHTML = `<div class="map-placeholder">🗺️ MAPPA NON<br>DISPONIBILE</div>`;
       }
-
-      // Stats
-      const STAT_LABELS = { simpatia: 'SIMPATIA', affidabilita: 'AFFIDABILITA', forza: 'FORZA', astuzia: 'ASTUZIA' };
-      const STAT_COLORS = { simpatia: '#f72585', affidabilita: '#4895ef', forza: '#e63946', astuzia: '#ffd700' };
-      const statsGrid = document.getElementById('statsGrid');
-      statsGrid.innerHTML = '';
-      if (pokemon.stats) {
-        Object.entries(pokemon.stats).forEach(function(entry) {
-          const key = entry[0];
-          const val = entry[1];
-          const row = document.createElement('div');
-          row.className = 'stat-row';
-          const fill = document.createElement('div');
-          fill.className = 'stat-bar-fill';
-          fill.style.background = STAT_COLORS[key] || accent;
-          fill.style.width = '0%';
-          fill.dataset.target = val + '%';
-          row.innerHTML =
-            '<span class="stat-label">' + (STAT_LABELS[key] || key) + '</span>' +
-            '<div class="stat-bar-wrap"></div>' +
-            '<span class="stat-value">' + val + '</span>';
-          row.querySelector('.stat-bar-wrap').appendChild(fill);
-          statsGrid.appendChild(row);
-        });
-        setTimeout(function() {
-          statsGrid.querySelectorAll('.stat-bar-fill').forEach(function(bar) {
-            bar.style.width = bar.dataset.target;
-          });
-        }, 50);
-      }
-
-      // Mosse
-      const mosseGrid = document.getElementById('mosseGrid');
-      mosseGrid.innerHTML = '';
-      if (pokemon.mosse) {
-        pokemon.mosse.forEach(function(m) {
-          const card = document.createElement('div');
-          card.className = 'mossa-card';
-          card.innerHTML =
-            '<span class="mossa-nome">' + m.nome + '</span>' +
-            '<span class="mossa-tipo">' + m.tipo.toUpperCase() + '</span>';
-          mosseGrid.appendChild(card);
-        });
-      }
-
       document.getElementById('pokeModal').style.display = 'flex';
     }
 
