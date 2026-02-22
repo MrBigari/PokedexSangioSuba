@@ -1059,7 +1059,7 @@
       <div class="pokeball-dropdown" id="pokeballDropdown">
         <button class="menu-item" onclick="showPage('progetto')">IL PROGETTO</button>
         <button class="menu-item" onclick="showPage('reclami')">RECLAMI</button>
-        <button class="menu-item" onclick="showPage('home')">🏠 HOME</button>
+        <button class="menu-item" onclick="showPage('home')">HOME</button>
       </div>
     </div>
 
@@ -1256,7 +1256,9 @@
       { id: 24, name: 'Frapo', specie: 'SHARPEDO',         tabs: ['info', 'map', 'sound'], type: 'signorine', stats: { simpatia: 70, affidabilita: 70, forza: 50, astuzia: 70 }, mosse: [{ nome: 'MOSSA 1', tipo: 'signorine' }, { nome: 'MOSSA 2', tipo: 'signorine' }], description: PLACEHOLDER, img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/319.png', audio: 'frapo.mp3', map: 'Morena.png' },
       { id: 25, name: 'Tabba', specie: 'AMPHAROS',         tabs: ['info', 'map', 'sound'], type: 'outsider',  stats: { simpatia: 70, affidabilita: 70, forza: 70, astuzia: 70 }, mosse: [{ nome: 'MOSSA 1', tipo: 'outsider' }, { nome: 'MOSSA 2', tipo: 'outsider' }], description: "Tabba si è evoluto con l'esposizione al potere dell'amicizia. Di natura docile si mette sempre a disposizione del gruppo se chiamato in causa. Sebbene innocuo all'apparenza, quando cala la notte e iniziano le danze, i pokemon dell'altro sesso rimangono preda del suo charme irresistibile.", img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/181.png', audio: 'tabba.mp3', map: 'Serenissima.png' },
       { id: 26, name: 'Giuls', specie: 'SWINUB',         tabs: ['info', 'map', 'sound'], type: 'signorine', stats: { simpatia: 70, affidabilita: 70, forza: 50, astuzia: 70 }, mosse: [{ nome: 'MOSSA 1', tipo: 'signorine' }, { nome: 'MOSSA 2', tipo: 'signorine' }], description: PLACEHOLDER, img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/220.png', audio: 'giuls.mp3', map: 'giuls.png' },
-      { id: 27, name: 'Mimmo', specie: 'SANDSHREW',         tabs: ['info', 'map', 'sound'], type: 'signorine', stats: { simpatia: 70, affidabilita: 70, forza: 50, astuzia: 70 }, mosse: [{ nome: 'MOSSA 1', tipo: 'signorine' }, { nome: 'MOSSA 2', tipo: 'signorine' }], description: PLACEHOLDER, img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/27.png', audio: 'mimmo.mp3', map: 'mimmo.png' },
+      { id: 27, name: 'Mimmo', specie: 'SANDSHREW',         tabs: ['info', 'map', 'sound'], type: 'signorine', stats: { simpatia: 70, affidabilita: 70, forza: 50, astuzia: 70 }, mosse: [{ nome: 'MOSSA 1', tipo: 'signorine' }, { nome: 'MOSSA 2', tipo: 'signorine' }], description: PLACEHOLDER, img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/27.png', audio: 'mimmo.mp3', map: 'Morena.png' },
+
+      { id: 28, name: 'Electabuzz', specie: 'ELECTABUZZ', tabs: ['info', 'map', 'sound'], type: 'outsider', stats: { simpatia: 70, affidabilita: 70, forza: 70, astuzia: 70 }, mosse: [{ nome: 'MOSSA 1', tipo: 'outsider' }, { nome: 'MOSSA 2', tipo: 'outsider' }], description: PLACEHOLDER, img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/125.png', audio: 'electabuzz.mp3', map: 'Alberone.png' },
     ];
 
     // ============================================================
@@ -1487,12 +1489,33 @@
     // ============================================================
     const reclamiForm = document.getElementById('reclamiForm');
     if (reclamiForm) {
+
+      function hasSentToday() {
+        try {
+          const lastSent = localStorage.getItem('reclamo_last_sent');
+          if (!lastSent) return false;
+          return new Date(lastSent).toDateString() === new Date().toDateString();
+        } catch(e) { return false; }
+      }
+
+      function showBlocked() {
+        reclamiForm.style.display = 'none';
+        const blocked = document.createElement('div');
+        blocked.className = 'form-success';
+        blocked.style.display = 'block';
+        blocked.style.color = 'var(--red)';
+        blocked.innerHTML = 'HAI GIA INVIATO<br>UN RECLAMO OGGI.<br><br>TORNA DOMANI.';
+        reclamiForm.parentNode.insertBefore(blocked, reclamiForm.nextSibling);
+      }
+
+      if (hasSentToday()) showBlocked();
+
       reclamiForm.addEventListener('submit', async (e) => {
         e.preventDefault();
+        if (hasSentToday()) { showBlocked(); return; }
         const btn = reclamiForm.querySelector('.form-submit');
         btn.textContent = 'INVIO IN CORSO...';
         btn.disabled = true;
-
         try {
           const res = await fetch(reclamiForm.action, {
             method: 'POST',
@@ -1500,6 +1523,7 @@
             headers: { 'Accept': 'application/json' }
           });
           if (res.ok) {
+            try { localStorage.setItem('reclamo_last_sent', new Date().toISOString()); } catch(e) {}
             reclamiForm.style.display = 'none';
             document.getElementById('formSuccess').style.display = 'block';
           } else {
