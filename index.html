@@ -141,6 +141,46 @@
       );
       pointer-events: none;
       z-index: 500;
+      transition: opacity 0.2s;
+    }
+    #app.no-scanlines::after {
+      display: none;
+    }
+
+    /* Scanlines localizzate su header, footer e dialog-box */
+    header { position: relative; overflow: hidden; }
+    footer { position: relative; overflow: hidden; }
+    header::after,
+    footer::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 3px,
+        rgba(0,0,0,0.07) 3px,
+        rgba(0,0,0,0.07) 4px
+      );
+      pointer-events: none;
+      z-index: 10;
+    }
+    .dialog-box {
+      overflow: hidden;
+    }
+    .dialog-box::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 3px,
+        rgba(0,0,0,0.07) 3px,
+        rgba(0,0,0,0.07) 4px
+      );
+      pointer-events: none;
+      z-index: 1;
     }
 
     /* ============================================================
@@ -636,6 +676,317 @@
     }
 
     /* ============================================================
+       MENU POKEBALL
+    ============================================================ */
+    .pokeball-menu {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      z-index: 800;
+    }
+
+    .pokeball-btn {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      border: 3px solid #000;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.5);
+      transition: transform 0.2s, box-shadow 0.2s;
+      background: none;
+      padding: 0;
+    }
+    .pokeball-btn:hover {
+      transform: scale(1.1) rotate(20deg);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+    }
+    .pokeball-top    { width: 100%; height: 50%; background: #cc0000; }
+    .pokeball-bottom { width: 100%; height: 50%; background: #fff; }
+    .pokeball-band {
+      position: absolute;
+      top: 50%; left: 0; right: 0;
+      height: 4px;
+      background: #000;
+      transform: translateY(-50%);
+    }
+    .pokeball-center {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 12px; height: 12px;
+      background: #fff;
+      border-radius: 50%;
+      border: 3px solid #000;
+    }
+
+    /* Dropdown menu */
+    .pokeball-dropdown {
+      position: absolute;
+      top: 54px;
+      right: 0;
+      background: var(--bg-mid);
+      border: 2px solid #1e3a5f;
+      border-radius: 4px;
+      min-width: 160px;
+      overflow: hidden;
+      display: none;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+      animation: dropIn 0.15s ease;
+    }
+    @keyframes dropIn {
+      from { opacity: 0; transform: translateY(-8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .pokeball-dropdown.open { display: block; }
+
+    .menu-item {
+      display: block;
+      width: 100%;
+      padding: 0.7rem 0.9rem;
+      font-family: 'Press Start 2P', cursive;
+      font-size: 0.38rem;
+      color: var(--white);
+      background: none;
+      border: none;
+      text-align: left;
+      cursor: pointer;
+      letter-spacing: 0.5px;
+      transition: background 0.15s;
+      border-bottom: 1px solid #1e3a5f;
+    }
+    .menu-item:last-child { border-bottom: none; }
+    .menu-item:hover { background: var(--bg-panel); color: var(--gold); }
+
+    /* ============================================================
+       PAGINE SECONDARIE
+    ============================================================ */
+    .subpage {
+      display: none;
+      animation: pageEnter 0.25s ease both;
+    }
+    .subpage.active { display: block; }
+
+    /* Back button */
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: 'Press Start 2P', cursive;
+      font-size: 0.38rem;
+      color: var(--gray);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 1rem;
+      letter-spacing: 0.5px;
+      transition: color 0.15s;
+    }
+    .back-btn:hover { color: var(--gold); }
+
+    /* ============================================================
+       PAGINA IL PROGETTO
+    ============================================================ */
+    .progetto-wrap {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 0 1rem 2rem;
+    }
+    .progetto-title {
+      font-size: clamp(0.6rem, 2.5vw, 0.9rem);
+      color: var(--gold);
+      text-align: center;
+      margin-bottom: 1.5rem;
+      text-shadow: 0 0 12px rgba(255,215,0,0.3);
+      letter-spacing: 2px;
+    }
+    /* Box dialogo stile Pokémon */
+    .dialog-box {
+      background: #fff;
+      border: 4px solid #000;
+      box-shadow: inset 0 0 0 3px #fff, inset 0 0 0 6px #000;
+      border-radius: 6px;
+      padding: 1.2rem 1.4rem 1.6rem;
+      margin-bottom: 1.5rem;
+      position: relative;
+      color: #000;
+      font-family: 'Press Start 2P', cursive;
+      font-size: 0.42rem;
+      line-height: 2.4;
+    }
+    .dialog-box p { margin-bottom: 0.6rem; }
+    .dialog-box p:last-child { margin-bottom: 0; }
+    /* Cursore ▼ lampeggiante */
+    .dialog-cursor {
+      position: absolute;
+      bottom: 0.5rem;
+      right: 0.8rem;
+      font-size: 0.5rem;
+      color: #000;
+      animation: blink 0.8s steps(1) infinite;
+    }
+
+    /* ===== SCENA OAK ===== */
+    .oak-scene {
+      display: block;
+      border: 2px solid #a0b8e8;
+      border-radius: 10px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.3);
+      overflow: hidden;
+      margin: 0 auto 1.5rem;
+      line-height: 0;
+      width: 160px;
+    }
+
+    .oak-img {
+      display: block;
+      width: 100%;
+      height: auto;
+      image-rendering: auto;
+    }
+
+    /* ===== DIALOG BOX GEN 3 ===== */
+    .dialog-box {
+      background: #ffffff;
+      border: 5px solid #4870b8;
+      border-radius: 12px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.3);
+      padding: 1.2rem 1.4rem 1.8rem;
+      margin-bottom: 1.5rem;
+      position: relative;
+      font-family: 'Press Start 2P', cursive;
+      font-size: 0.52rem;
+      line-height: 2.6;
+      max-width: 100%;
+    }
+
+    /* Bordo interno azzurro sottile */
+    .dialog-box::before {
+      content: '';
+      position: absolute;
+      inset: 4px;
+      border: 2px solid #a0b8e8;
+      border-radius: 8px;
+      pointer-events: none;
+    }
+
+    .dialog-box p { margin-bottom: 0.6rem; color: #111; }
+    .dialog-box p:last-child { margin-bottom: 0; }
+
+    /* Cursore ▼ */
+    .dialog-cursor {
+      position: absolute;
+      bottom: 0.5rem;
+      right: 1rem;
+      font-size: 0.55rem;
+      color: #4870b8;
+      animation: blink 0.8s steps(1) infinite;
+    }
+
+    .oak-wrapper { margin-bottom: 0; }
+
+    /* ============================================================
+       PAGINA RECLAMI
+    ============================================================ */
+    .reclami-wrap {
+      max-width: 500px;
+      margin: 0 auto;
+      padding: 0 1rem 2rem;
+    }
+    .reclami-title {
+      font-size: clamp(0.6rem, 2.5vw, 0.9rem);
+      color: var(--red);
+      text-align: center;
+      margin-bottom: 0.5rem;
+      letter-spacing: 2px;
+    }
+    .reclami-subtitle {
+      font-size: 0.35rem;
+      color: var(--gray);
+      text-align: center;
+      margin-bottom: 1.5rem;
+      letter-spacing: 1px;
+      line-height: 2;
+    }
+    .form-group {
+      margin-bottom: 1rem;
+    }
+    .form-label {
+      display: block;
+      font-size: 0.35rem;
+      color: var(--gray);
+      margin-bottom: 0.4rem;
+      letter-spacing: 0.5px;
+    }
+    .form-input,
+    .form-select,
+    .form-textarea {
+      width: 100%;
+      font-family: 'Press Start 2P', cursive;
+      font-size: 0.38rem;
+      background: var(--bg-mid);
+      border: 2px solid #1e3a5f;
+      color: var(--white);
+      border-radius: 3px;
+      padding: 0.6rem 0.8rem;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      box-sizing: border-box;
+    }
+    .form-input:focus,
+    .form-select:focus,
+    .form-textarea:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 8px rgba(255,215,0,0.2);
+    }
+    .form-select {
+      appearance: none;
+      cursor: pointer;
+    }
+    .form-select option { background: var(--bg-mid); }
+    .form-textarea {
+      resize: vertical;
+      min-height: 100px;
+      line-height: 2;
+    }
+    .form-submit {
+      width: 100%;
+      padding: 0.8rem;
+      font-family: 'Press Start 2P', cursive;
+      font-size: 0.42rem;
+      background: var(--red);
+      color: var(--white);
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+      letter-spacing: 1px;
+      transition: background 0.2s, transform 0.15s;
+      margin-top: 0.5rem;
+    }
+    .form-submit:hover { background: var(--red-dark); transform: translateY(-2px); }
+    .form-submit:active { transform: translateY(0); }
+
+    .form-success {
+      display: none;
+      text-align: center;
+      padding: 2rem;
+      font-size: 0.45rem;
+      color: var(--outsider);
+      line-height: 2.5;
+    }
+
+    /* Nota Formspree */
+    .formspree-note {
+      font-size: 0.3rem;
+      color: #445566;
+      text-align: center;
+      margin-top: 1rem;
+      line-height: 2;
+      letter-spacing: 0.5px;
+    }
+    .formspree-note a { color: var(--sangio); }
+
+    /* ============================================================
        RESPONSIVE
     ============================================================ */
     @media (max-width: 520px) {
@@ -697,6 +1048,21 @@
   <!-- APP -->
   <div id="app">
 
+    <!-- MENU POKEBALL -->
+    <div class="pokeball-menu">
+      <button class="pokeball-btn" id="pokeballBtn" aria-label="Menu">
+        <div class="pokeball-top"></div>
+        <div class="pokeball-bottom"></div>
+        <div class="pokeball-band"></div>
+        <div class="pokeball-center"></div>
+      </button>
+      <div class="pokeball-dropdown" id="pokeballDropdown">
+        <button class="menu-item" onclick="showPage('progetto')">IL PROGETTO</button>
+        <button class="menu-item" onclick="showPage('reclami')">RECLAMI</button>
+        <button class="menu-item" onclick="showPage('home')">🏠 HOME</button>
+      </div>
+    </div>
+
     <header>
       <div class="header-light big"></div>
       <div class="header-lights-row">
@@ -724,6 +1090,79 @@
 
     <div class="container" id="pokeList"></div>
     <div class="pagination" id="pagination"></div>
+
+    <!-- PAGINA: IL PROGETTO -->
+    <div class="subpage" id="pageProgetto">
+      <button class="back-btn" onclick="showPage('home')">◀ TORNA AL POKÉDEX</button>
+      <div class="progetto-wrap">
+        <div class="progetto-title">IL PROGETTO</div>
+
+        <!-- Scena Oak + Alakazam -->
+        <div class="oak-scene">
+          <img src="professor_bigari.png" alt="Professor Bigari" class="oak-img" />
+        </div>
+
+        <!-- Dialog box separato -->
+        <div class="dialog-box">
+            <p>Ciao! Sono il Professor Bigari. Ho dedicato anni a giocare ai Pokémon e pochissimo tempo a fare cose davvero utili. Il risultato? Questo Pokédex, in cui ogni mostriciattolo è associato ad una persona che in un modo o nell'altro fa parte della mia vita.</p>
+            <p>Se stai leggendo questo messaggio (grave non aver di meglio da fare) e non ti trovi nella lista, non temere! Possono esserci 3 diverse ragioni:</p>
+            <p>1) Odi i Pokémon (fatto ancora più grave del precedente)</p>
+            <p>2) Non abbiamo avuto modo di parlarne (forse dovremmo rivederci per l'occasione)</p>
+            <p>3) Non siamo davvero amici (ma apprezzo tu sia arrivato fin qui, dovrei seriamente rivalutarti)</p>
+            <p>In ogni caso, c'è una sezione Reclami apposta per te cliccando la pokéball in alto a destra.</p>
+            <p>Tengo a precisare che posso essere una persona vendicativa, quindi essere su questo sito non ti assicura il mio bene a tempo indeterminato. Infatti, una delle cose più divertenti sarà proprio vedere come cambieranno i partecipanti nel corso degli anni :D</p>
+            <p>Distinti saluti,<br>Il Professor Bigari</p>
+            <span class="dialog-cursor">▼</span>
+          </div>
+
+      </div>
+    </div>
+
+    <!-- PAGINA: RECLAMI -->
+    <div class="subpage" id="pageReclami">
+      <button class="back-btn" onclick="showPage('home')">◀ TORNA AL POKÉDEX</button>
+      <div class="reclami-wrap">
+        <div class="reclami-title">RECLAMI</div>
+        <div class="reclami-subtitle">HAI QUALCOSA DA RIDIRE?<br>COMPILA IL FORM QUI SOTTO.</div>
+
+        <form id="reclamiForm" action="https://formspree.io/f/xzdajlon" method="POST">
+          <div class="form-group">
+            <label class="form-label" for="recNome">NOME RECLAMANTE</label>
+            <input class="form-input" type="text" id="recNome" name="nome" placeholder="IL TUO NOME..." required />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="recArea">AREA DEL RECLAMO</label>
+            <select class="form-select" id="recArea" name="area" required>
+              <option value="" disabled selected>SELEZIONA...</option>
+              <option value="descrizione">DESCRIZIONE POKÉDEX</option>
+              <option value="zona">ZONA / MAPPA</option>
+              <option value="pokemon">POKÉMON ASSEGNATO</option>
+              <option value="gruppo">GRUPPO DI APPARTENENZA</option>
+              <option value="audio">AUDIO / VERSO</option>
+              <option value="altro">ALTRO</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="recMotivo">MOTIVO DEL RECLAMO</label>
+            <textarea class="form-textarea" id="recMotivo" name="motivo" placeholder="DESCRIVI QUI IL TUO RECLAMO..." required></textarea>
+          </div>
+
+          <button class="form-submit" type="submit">INVIA RECLAMO</button>
+        </form>
+
+        <div class="form-success" id="formSuccess">
+          ✅ RECLAMO RICEVUTO!<br><br>
+          VERRÀ ESAMINATO<br>CON LA DOVUTA SUPERFICIALITÀ.
+        </div>
+
+        <div class="formspree-note">
+          POWERED BY FORMSPREE —
+          <a href="https://formspree.io" target="_blank">CONFIGURA IL TUO ENDPOINT</a>
+        </div>
+      </div>
+    </div>
 
     <footer>SANGIOSUBA POKÉDEX v2.0 · LIMITED EDITION</footer>
   </div>
@@ -999,6 +1438,82 @@
         document.getElementById(tab.dataset.tab + 'Tab').classList.add('active');
       });
     });
+
+    // ============================================================
+    // MENU POKEBALL
+    // ============================================================
+    const pokeballBtn      = document.getElementById('pokeballBtn');
+    const pokeballDropdown = document.getElementById('pokeballDropdown');
+
+    pokeballBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      pokeballDropdown.classList.toggle('open');
+    });
+    document.addEventListener('click', () => {
+      pokeballDropdown.classList.remove('open');
+    });
+
+    // ============================================================
+    // NAVIGAZIONE PAGINE
+    // ============================================================
+    const mainContent = ['pokeList', 'pagination', 'typeFilter', 'searchBar'];
+
+    function showPage(page) {
+      pokeballDropdown.classList.remove('open');
+
+      // Nascondi/mostra contenuto principale
+      const isHome = page === 'home';
+      document.getElementById('pokeList').style.display    = isHome ? '' : 'none';
+      document.getElementById('pagination').style.display  = isHome ? '' : 'none';
+      document.getElementById('typeFilter').style.display  = isHome ? '' : 'none';
+      document.querySelector('.search-bar').style.display  = isHome ? '' : 'none';
+
+      // Nascondi tutte le subpage
+      document.querySelectorAll('.subpage').forEach(p => p.classList.remove('active'));
+
+      // Scanlines: disabilita sulla pagina Progetto
+      const app = document.getElementById('app');
+      app.classList.toggle('no-scanlines', page === 'progetto');
+
+      if (!isHome) {
+        const target = document.getElementById('page' + page.charAt(0).toUpperCase() + page.slice(1));
+        if (target) target.classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+
+    // ============================================================
+    // FORMSPREE - gestione submit
+    // ============================================================
+    const reclamiForm = document.getElementById('reclamiForm');
+    if (reclamiForm) {
+      reclamiForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = reclamiForm.querySelector('.form-submit');
+        btn.textContent = 'INVIO IN CORSO...';
+        btn.disabled = true;
+
+        try {
+          const res = await fetch(reclamiForm.action, {
+            method: 'POST',
+            body: new FormData(reclamiForm),
+            headers: { 'Accept': 'application/json' }
+          });
+          if (res.ok) {
+            reclamiForm.style.display = 'none';
+            document.getElementById('formSuccess').style.display = 'block';
+          } else {
+            btn.textContent = 'INVIA RECLAMO';
+            btn.disabled = false;
+            alert('ERRORE INVIO. RIPROVA.');
+          }
+        } catch {
+          btn.textContent = 'INVIA RECLAMO';
+          btn.disabled = false;
+          alert('ERRORE DI RETE. RIPROVA.');
+        }
+      });
+    }
 
     // ============================================================
     // INIT
