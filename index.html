@@ -661,6 +661,28 @@
       right: 1rem;
       z-index: 800;
     }
+    .pokeball-menu-inner {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .pokeball-arrow {
+      font-size: 0.3rem;
+      color: #ffffff;
+      cursor: pointer;
+      user-select: none;
+      line-height: 1;
+    }
+    .pokeball-label {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 0.3rem;
+      color: #ffffff;
+      letter-spacing: 1px;
+      cursor: pointer;
+      user-select: none;
+      line-height: 1;
+      margin-top: 4px;
+    }
 
     .pokeball-btn {
       width: 44px; height: 44px;
@@ -1005,9 +1027,133 @@
       /* Pagination */
       .page-number { padding: 0.4rem 0.6rem; font-size: 0.38rem; }
     }
+
+    /* ============================================================
+       GRAND OPENING SPLASH
+    ============================================================ */
+    #grandOpening {
+      position: fixed;
+      inset: 0;
+      background: #0a0a1a;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1.2rem;
+      transition: opacity 0.8s ease;
+    }
+    #grandOpening.fade-out {
+      opacity: 0;
+      pointer-events: none;
+    }
+    .go-title {
+      font-family: 'Press Start 2P', cursive;
+      font-size: clamp(0.65rem, 3vw, 1rem);
+      color: var(--gold);
+      text-align: center;
+      letter-spacing: 2px;
+      animation: goGlow 1s ease-in-out infinite alternate;
+      line-height: 2;
+    }
+    @keyframes goGlow {
+      from { text-shadow: 0 0 8px rgba(255,215,0,0.4); }
+      to   { text-shadow: 0 0 28px rgba(255,215,0,0.9), 0 0 52px rgba(255,215,0,0.3); }
+    }
+    .go-subtitle {
+      font-family: 'Press Start 2P', cursive;
+      font-size: clamp(0.32rem, 1.5vw, 0.45rem);
+      color: #ccd6f6;
+      text-align: center;
+      letter-spacing: 1px;
+      line-height: 2.8;
+    }
+    .go-date {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 0.32rem;
+      color: var(--gray);
+      letter-spacing: 2px;
+    }
+    .go-alakazam {
+      width: 120px;
+      height: 120px;
+      image-rendering: pixelated;
+      animation: goFloat 2s ease-in-out infinite;
+      filter: drop-shadow(0 0 16px rgba(255,215,0,0.7));
+    }
+    @keyframes goFloat {
+      0%, 100% { transform: translateY(0px); }
+      50%       { transform: translateY(-12px); }
+    }
+    .go-sup {
+      font-size: 0.55em;
+      vertical-align: super;
+      line-height: 0;
+    }
+    @keyframes goSpin {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+    @keyframes goStarBurst {
+      0%   { opacity: 0; transform: scale(0) rotate(-30deg); }
+      50%  { opacity: 1; transform: scale(1.4) rotate(10deg); }
+      100% { opacity: 1; transform: scale(1) rotate(0deg); }
+    }
+    .confetti {
+      position: fixed;
+      top: -12px;
+      width: 8px;
+      height: 8px;
+      border-radius: 2px;
+      animation: confettiFall linear forwards;
+      pointer-events: none;
+      z-index: 10000;
+    }
+    @keyframes confettiFall {
+      0%   { transform: translateY(0) rotate(0deg); opacity: 1; }
+      80%  { opacity: 1; }
+      100% { transform: translateY(105vh) rotate(720deg); opacity: 0; }
+    }
   </style>
 </head>
 <body>
+
+  <!-- GRAND OPENING SPLASH -->
+  <div id="grandOpening" style="display:none;">
+    <img class="go-alakazam" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/65.png" alt="Alakazam" />
+    <div class="go-title">★ GRAND OPENING ★</div>
+    <div class="go-subtitle">
+      BENVENUTI ALL'APERTURA<br>
+      UFFICIALE DEL<br>
+      POKÉDEX SANGIOSUBA
+    </div>
+    <div class="go-date">26 FEBBRAIO 2026 · POKÉMON 30<sup class="go-sup">TH</sup> ANNIVERSARY</div>
+  </div>
+  <!-- Script inline per mostrare splash PRIMA di qualsiasi rendering -->
+  <script>
+    // ============================================================
+    // TOGGLES — modifica qui per abilitare/disabilitare le animazioni
+    // ============================================================
+    const SHOW_BOOT_SCREEN   = false; // Boot screen GBA all'avvio
+    const SHOW_GRAND_OPENING = true;  // Splash inaugurale 26-27 Feb
+
+    // Pre-rendering: mostra grand opening e nasconde boot se necessario
+    (function() {
+      if (!SHOW_GRAND_OPENING) return;
+      const today = new Date();
+      const y = today.getFullYear(), mo = today.getMonth()+1, d = today.getDate();
+      if (!(y === 2026 && mo === 2 && (d === 26 || d === 27))) return;
+      const go = document.getElementById('grandOpening');
+      go.style.display = 'flex';
+      document.addEventListener('DOMContentLoaded', function() {
+        const boot = document.getElementById('bootScreen');
+        if (boot && SHOW_BOOT_SCREEN) {
+          boot.style.display = 'none';
+          setTimeout(() => { boot.style.display = ''; }, 5900);
+        }
+      });
+    })();
+  </script>
 
   <!-- BOOT SCREEN -->
   <div id="bootScreen">
@@ -1027,12 +1173,15 @@
 
     <!-- MENU POKEBALL -->
     <div class="pokeball-menu">
-      <button class="pokeball-btn" id="pokeballBtn" aria-label="Menu">
+      <div class="pokeball-menu-inner">
+        <span class="pokeball-label">MENU</span><span class="pokeball-arrow">▶</span>
+        <button class="pokeball-btn" id="pokeballBtn" aria-label="Menu">
         <div class="pokeball-top"></div>
         <div class="pokeball-bottom"></div>
         <div class="pokeball-band"></div>
         <div class="pokeball-center"></div>
       </button>
+      </div>
       <div class="pokeball-dropdown" id="pokeballDropdown">
         <button class="menu-item" onclick="showPage('progetto')">IL PROGETTO</button>
         <button class="menu-item" onclick="showPage('reclami')">RECLAMI</button>
@@ -1059,7 +1208,7 @@
     </nav>
 
     <div class="search-bar">
-      <input type="text" id="searchInput" placeholder="SEARCH NAME OR TYPE...">
+      <input type="text" id="searchInput" placeholder="CERCA PER NOME O GRUPPO...">
       <div class="search-counter" id="searchCounter">
         <span id="counterFiltered">19</span> / <span id="counterTotal">19</span> POKÉMON
       </div>
@@ -1179,19 +1328,86 @@
 
   <script>
     // ============================================================
+    // GRAND OPENING (26-27 Feb 2026)
+    // ============================================================
+    if (SHOW_GRAND_OPENING) (function() {
+      const today = new Date();
+      const y = today.getFullYear();
+      const mo = today.getMonth() + 1;
+      const d = today.getDate();
+      if (!(y === 2026 && mo === 2 && (d === 26 || d === 27))) return;
+
+      const go = document.getElementById('grandOpening');
+      go.style.display = 'flex';
+
+      const colors = ['#e63946','#4895ef','#f72585','#2dc653','#ffd700','#ffffff','#ff9f1c','#a855f7'];
+
+      // Coriandoli — 200 pezzi in ondate
+      function launchConfetti(count, delayOffset) {
+        for (let i = 0; i < count; i++) {
+          setTimeout(() => {
+            const el = document.createElement('div');
+            el.className = 'confetti';
+            el.style.left = Math.random() * 100 + 'vw';
+            el.style.background = colors[Math.floor(Math.random() * colors.length)];
+            // Mix di forme: quadrati, rettangoli, cerchi
+            const shape = Math.random();
+            if (shape < 0.33) {
+              el.style.width = el.style.height = (5 + Math.random() * 7) + 'px';
+            } else if (shape < 0.66) {
+              el.style.width = (4 + Math.random() * 5) + 'px';
+              el.style.height = (10 + Math.random() * 8) + 'px';
+            } else {
+              el.style.width = el.style.height = (6 + Math.random() * 6) + 'px';
+              el.style.borderRadius = '50%';
+            }
+            el.style.animationDuration = (2 + Math.random() * 2.5) + 's';
+            el.style.animationDelay = (Math.random() * 1.5) + 's';
+            document.body.appendChild(el);
+            setTimeout(() => el.remove(), 5500);
+          }, delayOffset + i * 20);
+        }
+      }
+
+      // Stelle burst laterali
+      function burstStars() {
+        const starEl = document.getElementById('grandOpening');
+        ['go-star-left','go-star-right'].forEach((cls, i) => {
+          const s = document.createElement('div');
+          s.style.cssText = `position:absolute;font-size:2rem;animation:goStarBurst 0.6s ease both;animation-delay:${0.3+i*0.15}s;opacity:0;${i===0?'left:8%':'right:8%'};top:35%;`;
+          s.textContent = '✨';
+          starEl.appendChild(s);
+        });
+      }
+
+      launchConfetti(120, 0);       // Prima ondata
+      launchConfetti(100, 1200);    // Seconda ondata
+      launchConfetti(80, 2800);     // Terza ondata
+      burstStars();
+
+      // Fade out dopo 5s
+      setTimeout(() => {
+        go.classList.add('fade-out');
+        setTimeout(() => { go.style.display = 'none'; }, 900);
+      }, 5000);
+    })();
+
+    // ============================================================
     // BOOT SCREEN
     // ============================================================
     const bootEl = document.getElementById('bootScreen');
-
-    function dismissBoot() {
-      if (bootEl.classList.contains('fade-out')) return;
-      bootEl.classList.add('fade-out');
-      setTimeout(() => { bootEl.style.display = 'none'; }, 800);
+    if (!SHOW_BOOT_SCREEN) {
+      bootEl.style.display = 'none';
+    } else {
+      function dismissBoot() {
+        if (bootEl.classList.contains('fade-out')) return;
+        bootEl.classList.add('fade-out');
+        setTimeout(() => { bootEl.style.display = 'none'; }, 800);
+      }
+      setTimeout(dismissBoot, 2800);
+      bootEl.addEventListener('click', dismissBoot);
+      document.addEventListener('keydown', dismissBoot, { once: true });
     }
-
-    setTimeout(dismissBoot, 2800);
-    bootEl.addEventListener('click', dismissBoot);
-    document.addEventListener('keydown', dismissBoot, { once: true });
 
     // ============================================================
     // DATI
@@ -1219,9 +1435,9 @@
       { id: 11, name: 'Campagna', specie: 'KECLEON',      type: 'sangio',    description: "I Campagna variano la colorazione del proprio corpo per mimetizzarsi con l'ambiente circostante, garantendogli un atteggiamento macchiavellico. Spesso intrappolato negli intermediari finanziari in cui lavora, l'estate si dedica alla caccia di femmine grazie alla sua lunga lingua che non lascia scampo.",    img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/352.png', audio: 'campagna.mp3',       map: 'SanGiovanni.png' },
       { id: 12, name: 'Dottore', specie: 'MIGHTYENA',       type: 'sangio',    description: "Allo stato brado il Dottore si sposta e agisce soltanto assieme al suo branco nelle zone di San Giovanni. A causa della sua natura molto selvatica si trova a suo agio solo con pokemon che considera suoi pari, salvo poi uscire e rientrare spesso dai gruppi Whatsapp. Nonostante ciò sembra molto empatico con i suoi cari, alcuni dicono sia anche imprevedibile spalle alla porta.", img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/262.png', audio: 'dottore.mp3',        map: 'SanGiovanni.png' },
       { id: 13, name: 'Ciummellina', specie: 'EEVEE',   type: 'signorine', description: "Ciummelina è dotata di un instabile corredo genetico che muta in base all'habitat naturale in cui è integrata. A seconda del rapporto con lei, mostrerà atteggiamenti totalmente diversi tra loro, perciò guai a farla arrabbiare. Da diversi anni è sempre in compagnia del suo Machamp preferito, uno spettacolo vederli assieme.", img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/133.png', audio: 'ciummellina.mp3',    map: 'Prenestina.png' },
-      { id: 14, name: 'Turpe', specie: 'MUNCHLAX',         type: 'sangio',    description: "Turpe (o Luspa per gli amici) è un tipo molto vorace che adora mangiare: può consumare grandi quantità di cibo in una sola volta senza sfamarsi. Differisce dalla sua evoluzione, Maspa, per essere più attivo: tende a giocare a calcetto per polisportive degne di nota e per farlo si trasforma nel Guaje di Porto Alegre.", img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/446.png', audio: 'audio/turpe.mp3', map: 'Serenissima.png' },
+      { id: 14, name: 'Turpe', specie: 'MUNCHLAX',         type: 'sangio',    description: "Turpe (o Luspa per gli amici) è un tipo molto vorace che adora fumare e mangiare. Risulta facilmente simpatico a tutti tanto da riuscire a scroccare sempre il passaggio in qualsiasi situazione. Differisce dalla sua evoluzione, Maspa, per essere molto più attivo, infatti gioca a calcio tutte le settimane in tornei amatoriali di poco conto trasformandosi, all'evenienza, nel Guaje di Porto Alegre.", img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/446.png', audio: 'audio/turpe.mp3', map: 'Serenissima.png' },
       { id: 15, name: 'Nanni', specie: 'SCIZOR',         type: 'sangio',    description: "Il cuore di Nanni è duro come l'acciaio. Le normali sollecitazioni non riescono neanche a scalfirlo. Le grandi ali che ha, servono per trappare nei momenti di necessità. Tende ad avere una natura schiva con la maggior parte degli altri pokemon ma si vocifera che qualche tempo fa abbia perso la testa per un esemplare di Torchic.",                                               img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/212.png', audio: 'nanni.mp3',          map: 'SanGiovanni.png' },
-      { id: 16, name: 'Sveva', specie: 'COMBUSKEN',         type: 'signorine', description: "Gli esemplari di Sveva sono curiosi per natura in particolar modo per le arti giuridiche. Spesso parte di famiglie numerose, ultimamente sembra esserci stato un avvicinamento verso la tribù degli Scizor provenienti dalla Sardegna. Cerca lo svago ma sa essere anche una gran lavoratrice, in più il suo affetto ha mitigato il cuore d acciaio del suo giovane compagno non sempre avvezzo a manifestazioni pubbliche.",                                               img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/255.png', audio: 'sveva.mp3',          map: 'SanGiovanni.png' },
+      { id: 16, name: 'Sveva', specie: 'TORCHIC',         type: 'signorine', description: "Gli esemplari di Sveva sono curiosi per natura in particolar modo per le arti giuridiche. Spesso parte di famiglie numerose, ultimamente sembra esserci stato un avvicinamento verso la tribù degli Scizor provenienti dalla Sardegna. Cerca lo svago ma sa essere anche una gran lavoratrice, in più il suo affetto ha mitigato il cuore d acciaio del suo giovane compagno non sempre avvezzo a manifestazioni pubbliche.",                                               img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/255.png', audio: 'sveva.mp3',          map: 'SanGiovanni.png' },
       { id: 17, name: 'Camilla', specie: 'SKITTY',       type: 'signorine', description: "Camilla è una dei pochi esemplari di pokémon sopravvissuti, senza effetti collaterali visibili, all'essere cresciuti insieme ad un gruppo di 'maschi veri'. Solitamente la si trova sempre in compagnia di una sua cara amica con la quale condivide una passione insolita per il gossip. Si dice che sia molto difficile guadagnare la sua totale fiducia.",                                               img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/300.png', audio: 'camilla.mp3',        map: 'Alberone.png' },
       { id: 18, name: 'Sandro Artale', specie: 'HITMONCHAN', type: 'suba',      description: "Si dice che Sandro Artale abbia l'animo di un pugile destinato al campionato mondiale. Questo pokemon ha uno spirito indomito e non demorde mai di fronte a nulla, neanche alle strette di mano. Negli ultimi anni ha riscoperto dolcezza e amore dopo aver incontrato una femmina di Houndoom.",                                               img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/107.png', audio: 'artale.mp3',         map: 'Cinecittà.png' },
       { id: 19, name: 'Asietta', specie: 'HOUNDOOM',       type: 'signorine', description: "Gli esemplari di Asietta sono considerati tra i più cazzuti (così riporta l'enciclopedia pokémon) del panorama romano. Predatori per natura, nel corso della loro evoluzione hanno affinato intelletto e furbizia, difficilmente si riesce a fregarli. Da diversi anni, sembra però aver trovato un amore stabile con un Hitmonchan del vicinato colto nel suo percorso verso l'avvocatura ad alti livelli, una bellissima coppia!",                                               img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/229.png', audio: 'asietta.mp3',        map: 'Cinecittà.png' },
