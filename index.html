@@ -1637,6 +1637,9 @@
     function closeModal() {
       document.getElementById('pokeModal').style.display = 'none';
       document.getElementById('modalAudio').pause();
+      // Riprendi OST se era in pausa per il tab VERSO
+      const bgMusic = document.getElementById('bgMusic');
+      if (bgMusic && bgMusic.paused) bgMusic.play().catch(() => {});
     }
 
     document.getElementById('pokeModal').addEventListener('click', (e) => {
@@ -1651,6 +1654,15 @@
         document.querySelectorAll('.modal-body > div').forEach(d => d.classList.remove('active'));
         tab.classList.add('active');
         document.getElementById(tab.dataset.tab + 'Tab').classList.add('active');
+        // Pausa OST sul tab VERSO, riprendi sugli altri
+        const bgMusic = document.getElementById('bgMusic');
+        if (bgMusic) {
+          if (tab.dataset.tab === 'sound') {
+            bgMusic.pause();
+          } else {
+            if (bgMusic.paused) bgMusic.play().catch(() => {});
+          }
+        }
       });
     });
 
