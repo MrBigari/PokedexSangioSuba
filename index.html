@@ -1074,12 +1074,28 @@
       color: var(--gray);
       letter-spacing: 2px;
     }
+    .go-duo {
+      display: flex;
+      align-items: flex-end;
+      gap: 1.5rem;
+    }
     .go-alakazam {
-      width: 120px;
-      height: 120px;
+      width: 110px;
+      height: 110px;
       image-rendering: pixelated;
       animation: goFloat 2s ease-in-out infinite;
       filter: drop-shadow(0 0 16px rgba(255,215,0,0.7));
+    }
+    .go-prof {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      object-position: top;
+      border-radius: 6px;
+      animation: goFloat 2s ease-in-out infinite;
+      animation-delay: 0.3s;
+      filter: drop-shadow(0 0 16px rgba(255,215,0,0.5));
+      image-rendering: pixelated;
     }
     @keyframes goFloat {
       0%, 100% { transform: translateY(0px); }
@@ -1120,7 +1136,10 @@
 
   <!-- GRAND OPENING SPLASH -->
   <div id="grandOpening" style="display:none;">
-    <img class="go-alakazam" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/65.png" alt="Alakazam" />
+    <div class="go-duo">
+      <img class="go-prof" src="profbigari.jpg" alt="Professor Bigari" />
+      <img class="go-alakazam" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/65.png" alt="Alakazam" />
+    </div>
     <div class="go-title">★ GRAND OPENING ★</div>
     <div class="go-subtitle">
       BENVENUTI ALL'APERTURA<br>
@@ -1428,7 +1447,7 @@
       { id:  4, name: 'Bergantino', specie: 'URSARING',    type: 'sangio',    description: "La leggenda narra che nelle foreste dove è cresciuto Mr. Bergantino, lui insultasse la maggior parte dei pokemon. Nonostante questo, tiene molto ai pochi affetti che si sceglie e si dice abbia percorso chilometri per rivedere la sua dolce metà quando lei fu costretta ad emigrare. Molto spesso manca di tatto e fino a poco tempo fa era accostato a discutibili movimenti politici con la zampa alzata.",                                               img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/217.png', audio: 'bergantino.mp3',     map: 'SanGiovanni.png' },
       { id:  5, name: 'Giazzy', specie: 'TYPHLOSION',        type: 'suba',      description: "Di esemplari di Piuma (grazie al cielo) non se ne trovano molti. Sebbene facilmente infiammabile, dà tutto sé stesso alle persone che si mostrano gentili con lui. Negli ultimi tempi, lo si vede sempre svagarsi per i laghi della regione con la sua Sharpedo, una coppia piuttosto ardente.",                                    img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/157.png', audio: 'giazzy.mp3',         map: 'Cinecittà.png' },
       { id:  6, name: 'Pett', specie: 'GALLADE',          type: 'suba',      description: "Pett è noto per la sua freddezza sotto porta quando gioca con i suoi compagni di merende. Alcuni lo considerano un dottore dei piedi, ma i più sostengono che sia in grado di prevedere il futuro (o almeno il Fantacalcio). Da qualche anno è migrato verso le prateria in compagnia di una piccola Bellossom.", img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/475.png', audio: 'pett.mp3', map: 'Cinecittà.png' },
-      { id:  7, name: 'Gaia', specie: 'SQUIRTLE',          type: 'signorine', description: "Gaia ha tra le sue caratteristiche peculiari il mostrarsi sempre e inspiegabilmente chill. Si ipotizza che questo derivi da una prolungata esposizione ad esemplari di Absol. Alcuni rumours dicono che stia lavorando come regista da remoto per sit-com latinoamericane di bassa lega ma non sembrano esserci notizie verificate in merito. Resta un grande interesse verso la cinematografia.", img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/7.png', audio: 'audio/squirtle.mp3', map: 'Cinecittà.png' },
+      { id:  7, name: 'Gaia', specie: 'SQUIRTLE',          type: 'signorine', description: "Gaia ha tra le sue caratteristiche peculiari il mostrarsi sempre e inspiegabilmente chill. Si ipotizza che questo derivi da una prolungata esposizione ad esemplari di Absol. Alcuni rumours dicono che stia lavorando come regista da remoto per sit-com latinoamericane di bassa lega ma non sembrano esserci notizie verificate in merito. Resta un grande interesse verso la cinematografia.", img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/7.png', audio: 'gaia.mp3', map: 'Cinecittà.png' },
       { id:  8, name: 'Popa', specie: 'JIGGLYPUFF',          type: 'signorine', description: "Popa si può trovare negli asili nido della regione. È una bravissima maestra che usa i suoi dolci occhi tondi per intonare una melodia che spinge i cuccioli ad addormentarsi. Un pochino irascibile, se infastidita tende a gonfiarsi e diventare molto arrabbiata. Ultimamente la si vede in compagnia di un Alakazam, sembrano tanto innamorati.", img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/39.png', audio: 'audio/jigglypuff.mp3', map: 'Morena.png' },
       { id:  9, name: 'Pompo', specie: 'ABSOL',         type: 'suba',      description: "Pompo ha una fortuna innata che lo consente di predire in anticipo vere e proprie catastrofi naturali. Vive negli ambienti montani più aspri e inospitali. Soltanto raramente si allontana dalle montagne per avventurarsi a valle. Essendo molto fortunati, i Pompa sono piuttosto longevi, infatti, si stima possano vivere fino a cent'anni.", img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/359.png', audio: 'pompa.mp3', map: 'Cinecittà.png' },
       { id: 10, name: 'MrBigari', specie: 'ALAKAZAM',      type: 'suba',      description: 'Si narra che MrBigari possieda la peculiare capacità di attirare fanciulle che fanno perdere la testa ai suoi amici più stretti. Oltre a questo, alcune stime parlano di un Q.I. oltre i 200 punti, ma capacità calcistiche tendenti allo zero. Un esemplare molto disciplinato, ultimamente sembra aver giurato amore ad una signorina Jigglypuff incontrata in una delle sue famosissime notti brave.', img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/65.png', audio: 'audio/mrbigari.mp3', map: 'Cinecittà.png' },
@@ -1730,6 +1749,7 @@
     // INIT
     // ============================================================
     renderList();
+
   </script>
 </body>
 </html>
