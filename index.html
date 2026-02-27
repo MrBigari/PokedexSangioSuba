@@ -1132,6 +1132,9 @@
 </head>
 <body>
 
+  <!-- MUSICA DI SOTTOFONDO -->
+  <audio id="bgMusic" src="littleroot.mp3" loop></audio>
+
   <!-- GRAND OPENING SPLASH -->
   <div id="grandOpening" style="display:none;">
     <div class="go-duo">
@@ -1405,7 +1408,13 @@
       // Fade out dopo 5s
       setTimeout(() => {
         go.classList.add('fade-out');
-        setTimeout(() => { go.style.display = 'none'; }, 900);
+        setTimeout(() => {
+          go.style.display = 'none';
+          // Avvia musica di sottofondo
+          const bgMusic = document.getElementById('bgMusic');
+          bgMusic.volume = 0.3;
+          bgMusic.play().catch(() => {});
+        }, 900);
       }, 5000);
     })();
 
