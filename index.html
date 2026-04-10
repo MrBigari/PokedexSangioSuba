@@ -24,16 +24,17 @@
       --screen-dark:#306230;
       --white:      #e8f4f8;
       --gray:       #8899aa;
-
+ 
       /* Colori per tipo */
       --suba:       #e63946;
       --sangio:     #4895ef;
       --signorine:  #cc55ff;
       --outsider:   #2dc653;
+      --colleghi:   #f4a261;
     }
-
+ 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
+ 
     body {
       font-family: 'Press Start 2P', cursive;
       background-color: var(--bg);
@@ -41,7 +42,7 @@
       min-height: 100vh;
       overflow-x: hidden;
     }
-
+ 
     /* ============================================================
        SCHERMATA DI AVVIO
     ============================================================ */
@@ -57,21 +58,21 @@
       gap: 2rem;
       cursor: pointer;
     }
-
+ 
     #bootScreen.fade-out {
       animation: bootFade 0.8s ease forwards;
       pointer-events: none;
     }
-
+ 
     @keyframes bootFade { to { opacity: 0; } }
-
+ 
     .boot-logo {
       text-align: center;
       opacity: 1;
       font-family: 'Press Start 2P', monospace;
     }
     @keyframes bootAppear { to { opacity: 1; } }
-
+ 
     .boot-title {
       font-size: clamp(0.8rem, 4vw, 1.4rem);
       color: var(--gold);
@@ -114,7 +115,7 @@
       animation: fillBar 1.8s ease 0.5s forwards;
     }
     @keyframes fillBar { to { width: 100%; } }
-
+ 
     .boot-copy {
       font-size: 0.3rem;
       color: #333;
@@ -124,7 +125,7 @@
       animation: bootAppear 0s 0.4s both;
       opacity: 0;
     }
-
+ 
     /* ============================================================
        SCANLINES — effetto schermo GBA sull'intera pagina
     ============================================================ */
@@ -146,7 +147,7 @@
     #app.no-scanlines::after {
       display: none;
     }
-
+ 
     /* Scanlines localizzate su header, footer e dialog-box */
     header { position: relative; overflow: hidden; }
     footer { position: relative; overflow: hidden; }
@@ -182,7 +183,7 @@
       pointer-events: none;
       z-index: 1;
     }
-
+ 
     /* ============================================================
        HEADER — scocca Pokédex
     ============================================================ */
@@ -198,7 +199,7 @@
       position: relative;
       min-height: 64px;
     }
-
+ 
     .header-light {
       border-radius: 50%;
       flex-shrink: 0;
@@ -216,7 +217,7 @@
     .header-light.green  { background: radial-gradient(circle at 33% 33%, #aaffaa, #00aa00); border: 2px solid #006600; }
     .header-light.reds   { background: radial-gradient(circle at 33% 33%, #ffaaaa, #cc2200); border: 2px solid #880000; }
     .header-lights-row   { display: flex; gap: 5px; align-items: center; position: relative; z-index: 1; }
-
+ 
     header h1 {
       position: absolute;
       left: 0; right: 0;
@@ -227,7 +228,7 @@
       letter-spacing: 1px;
       pointer-events: none;
     }
-
+ 
     /* ============================================================
        NAV — filtri
     ============================================================ */
@@ -255,10 +256,11 @@
     nav span[data-type="sangio"]    { background: rgba(72,149,239,0.15); color: #90cbff; border-color: var(--sangio); }
     nav span[data-type="signorine"] { background: rgba(247,37,133,0.15); color: #ffaadd; border-color: var(--signorine); }
     nav span[data-type="outsider"]  { background: rgba(45,198,83,0.15);  color: #88ffaa; border-color: var(--outsider); }
-
+    nav span[data-type="colleghi"]   { background: rgba(244,162,97,0.15);  color: #ffd0a0; border-color: var(--colleghi); }
+ 
     nav span.active-filter { filter: brightness(1.6); transform: translateY(-2px); box-shadow: 0 3px 10px rgba(0,0,0,0.4); }
     nav span:hover:not(.active-filter) { filter: brightness(1.3); transform: translateY(-1px); }
-
+ 
     /* ============================================================
        SEARCH
     ============================================================ */
@@ -293,7 +295,7 @@
     .search-counter span {
       color: var(--gold);
     }
-
+ 
     /* ============================================================
        LISTA POKEMON
     ============================================================ */
@@ -304,7 +306,7 @@
       gap: 0.8rem;
       padding: 1rem;
     }
-
+ 
     /* Transizione pagina */
     .container.page-exit {
       animation: pageExit 0.18s ease forwards;
@@ -320,7 +322,7 @@
       from { opacity: 0; transform: translateX(20px); }
       to   { opacity: 1; transform: translateX(0); }
     }
-
+ 
     .poke-bar {
       background: linear-gradient(135deg, #1e2d4a, #243558);
       border: 2px solid #3a5a8a;
@@ -339,7 +341,7 @@
       overflow: hidden;
       box-shadow: 0 2px 8px rgba(0,0,0,0.4);
     }
-
+ 
     .poke-bar::before {
       content: '';
       position: absolute;
@@ -347,28 +349,29 @@
       background: linear-gradient(135deg, rgba(255,255,255,0.04) 0%, transparent 60%);
       pointer-events: none;
     }
-
+ 
     @keyframes slideIn {
       from { transform: translateX(-16px); opacity: 0; }
       to   { transform: translateX(0);     opacity: 1; }
     }
-
+ 
     .poke-bar[data-type="suba"]      { --type-color: var(--suba); }
     .poke-bar[data-type="sangio"]    { --type-color: var(--sangio); }
     .poke-bar[data-type="signorine"] { --type-color: var(--signorine); }
     .poke-bar[data-type="outsider"]  { --type-color: var(--outsider); }
-
+    .poke-bar[data-type="colleghi"]   { --type-color: var(--colleghi); }
+ 
     .poke-bar:hover {
       transform: translateX(5px) scale(1.01);
       box-shadow: -5px 0 18px rgba(0,0,0,0.5), 0 4px 16px rgba(0,0,0,0.3);
       border-left-color: var(--type-color);
       border-color: var(--type-color);
     }
-
+ 
     .poke-info { display: flex; flex-direction: column; gap: 0.5rem; flex: 1; }
     .poke-number { font-size: 0.4rem; color: var(--gray); }
     .poke-name   { font-size: clamp(0.5rem, 2vw, 0.72rem); color: var(--white); line-height: 1.4; }
-
+ 
     .poke-type-badge {
       font-size: 0.35rem;
       padding: 0.2rem 0.45rem;
@@ -381,13 +384,13 @@
       color: var(--white);
       background: rgba(255,255,255,0.07);
     }
-
+ 
     .placeholder-warning {
       font-size: 0.32rem;
       color: #886600;
       margin-top: 0.1rem;
     }
-
+ 
     /* ===== SPRITE SHAKE/WIGGLE on hover ===== */
     .sprite-wrap {
       position: relative;
@@ -414,7 +417,7 @@
       90%  { transform: rotate(2deg) translateX(1px); }
       100% { transform: rotate(0deg) translateX(0px); }
     }
-
+ 
     /* ============================================================
        PAGINAZIONE
     ============================================================ */
@@ -437,7 +440,7 @@
     }
     .page-number:hover       { background: var(--red); border-color: var(--red); }
     .page-number.active      { background: var(--gold); color: #000; border-color: var(--gold); }
-
+ 
     /* ============================================================
        MODAL
     ============================================================ */
@@ -451,7 +454,7 @@
       z-index: 1000;
       backdrop-filter: blur(4px);
     }
-
+ 
     .modal-content {
       background: var(--bg-mid);
       border: 3px solid var(--bg-panel);
@@ -495,14 +498,14 @@
       from { transform: rotate(-4deg) scale(0.88) translateY(16px); opacity: 0; }
       to   { transform: rotate(0deg)  scale(1)    translateY(0);    opacity: 1; }
     }
-
+ 
     /* Stripe colorata in cima per tipo */
     .modal-type-stripe {
       height: 5px;
       width: 100%;
       transition: background 0.2s;
     }
-
+ 
     .modal-header {
       padding: 0.8rem 1rem 0;
       display: flex;
@@ -525,7 +528,7 @@
       line-height: 1;
     }
     .modal-close:hover { color: var(--red); }
-
+ 
     .modal-tabs {
       display: flex;
       gap: 0;
@@ -544,11 +547,11 @@
     }
     .modal-tab:hover  { color: var(--white); }
     .modal-tab.active { color: var(--gold); border-bottom-color: var(--gold); }
-
+ 
     .modal-body { padding: 1rem; }
     .modal-body > div { display: none; }
     .modal-body > .active { display: block; }
-
+ 
     /* Schermo grigio retro per lo sprite */
     .sprite-screen {
       background: linear-gradient(145deg, #c8c8c8, #b0b0b0 60%, #989898);
@@ -577,7 +580,7 @@
       pointer-events: none;
       border-radius: 2px;
     }
-
+ 
     #modalImage {
       width: 120px; height: 120px;
       image-rendering: pixelated;
@@ -591,7 +594,7 @@
       0%, 100% { transform: translateY(0px); }
       50%       { transform: translateY(-6px); }
     }
-
+ 
     #modalName {
       font-size: 0.58rem;
       color: var(--modal-accent, var(--white));
@@ -613,7 +616,7 @@
       line-height: 2.2;
       font-family: 'Press Start 2P', cursive;
     }
-
+ 
     .map-placeholder {
       text-align: center;
       padding: 3rem 1rem;
@@ -630,7 +633,7 @@
       width: 100%;
       margin-top: 1rem;
     }
-
+ 
     .no-results {
       font-size: 0.5rem;
       color: var(--gray);
@@ -638,7 +641,7 @@
       padding: 3rem 1rem;
       line-height: 2.5;
     }
-
+ 
     /* ============================================================
        FOOTER
     ============================================================ */
@@ -651,7 +654,7 @@
       border-top: 1px solid #1e3a5f;
       margin-top: 0.5rem;
     }
-
+ 
     /* ============================================================
        MENU POKEBALL
     ============================================================ */
@@ -683,7 +686,7 @@
       line-height: 1;
       margin-top: 4px;
     }
-
+ 
     .pokeball-btn {
       width: 44px; height: 44px;
       border-radius: 50%;
@@ -718,7 +721,7 @@
       border-radius: 50%;
       border: 3px solid #000;
     }
-
+ 
     /* Dropdown menu */
     .pokeball-dropdown {
       position: absolute;
@@ -738,7 +741,7 @@
       to   { opacity: 1; transform: translateY(0); }
     }
     .pokeball-dropdown.open { display: block; }
-
+ 
     .menu-item {
       display: block;
       width: 100%;
@@ -756,7 +759,7 @@
     }
     .menu-item:last-child { border-bottom: none; }
     .menu-item:hover { background: var(--bg-panel); color: var(--gold); }
-
+ 
     /* ============================================================
        PAGINE SECONDARIE
     ============================================================ */
@@ -765,7 +768,7 @@
       animation: pageEnter 0.25s ease both;
     }
     .subpage.active { display: block; }
-
+ 
     /* Back button */
     .back-btn {
       display: inline-flex;
@@ -782,7 +785,7 @@
       transition: color 0.15s;
     }
     .back-btn:hover { color: var(--gold); }
-
+ 
     /* ============================================================
        PAGINA IL PROGETTO
     ============================================================ */
@@ -824,7 +827,7 @@
       color: #000;
       animation: blink 0.8s steps(1) infinite;
     }
-
+ 
     /* ===== SCENA OAK ===== */
     .oak-scene {
       display: block;
@@ -836,14 +839,14 @@
       line-height: 0;
       width: 160px;
     }
-
+ 
     .oak-img {
       display: block;
       width: 100%;
       height: auto;
       image-rendering: auto;
     }
-
+ 
     /* ===== DIALOG BOX GEN 3 ===== */
     .dialog-box {
       background: #ffffff;
@@ -858,7 +861,7 @@
       line-height: 2.6;
       max-width: 100%;
     }
-
+ 
     /* Bordo interno azzurro sottile */
     .dialog-box::before {
       content: '';
@@ -868,10 +871,10 @@
       border-radius: 8px;
       pointer-events: none;
     }
-
+ 
     .dialog-box p { margin-bottom: 0.6rem; color: #111; }
     .dialog-box p:last-child { margin-bottom: 0; }
-
+ 
     /* Cursore ▼ */
     .dialog-cursor {
       position: absolute;
@@ -881,9 +884,9 @@
       color: #4870b8;
       animation: blink 0.8s steps(1) infinite;
     }
-
+ 
     .oak-wrapper { margin-bottom: 0; }
-
+ 
     /* ============================================================
        PAGINA RECLAMI
     ============================================================ */
@@ -964,7 +967,7 @@
     }
     .form-submit:hover { background: var(--red-dark); transform: translateY(-2px); }
     .form-submit:active { transform: translateY(0); }
-
+ 
     .form-success {
       display: none;
       text-align: center;
@@ -973,7 +976,7 @@
       color: var(--outsider);
       line-height: 2.5;
     }
-
+ 
     /* Nota Formspree */
     .formspree-note {
       font-size: 0.3rem;
@@ -984,7 +987,7 @@
       letter-spacing: 0.5px;
     }
     .formspree-note a { color: var(--sangio); }
-
+ 
     /* ============================================================
        RESPONSIVE
     ============================================================ */
@@ -999,22 +1002,22 @@
       }
       .header-light.big { width: 26px; height: 26px; flex-shrink: 0; }
       .header-lights-row { display: none; }
-
+ 
       /* Nav */
       nav { gap: 0.4rem; padding: 0.6rem; }
       nav span { font-size: 0.32rem; padding: 0.35rem 0.45rem; }
-
+ 
       /* Card */
       .poke-bar { padding: 0.7rem 0.8rem; gap: 0.5rem; }
       .poke-name { font-size: 0.5rem; }
       .poke-number { font-size: 0.35rem; }
       .poke-type-badge { font-size: 0.3rem; }
       .sprite-wrap { width: 68px; height: 68px; }
-
+ 
       /* Search */
       .search-bar input { width: 92%; font-size: 0.38rem; }
       .search-counter { font-size: 0.28rem; }
-
+ 
       /* Modal */
       .modal-content { width: 95%; }
       .modal-body { padding: 0.7rem; }
@@ -1023,11 +1026,11 @@
       #modalDescription { font-size: 0.38rem; line-height: 2; }
       .modal-tab { font-size: 0.32rem; padding: 0.35rem 0.5rem; }
       .modal-pokemon-id { font-size: 0.3rem; }
-
+ 
       /* Pagination */
       .page-number { padding: 0.4rem 0.6rem; font-size: 0.38rem; }
     }
-
+ 
     /* ============================================================
        GRAND OPENING SPLASH
     ============================================================ */
@@ -1131,10 +1134,10 @@
   </style>
 </head>
 <body>
-
+ 
   <!-- MUSICA DI SOTTOFONDO -->
   <audio id="bgMusic" src="littleroot.mp3" loop></audio>
-
+ 
   <!-- GRAND OPENING SPLASH -->
   <div id="grandOpening" style="display:none;">
     <div class="go-duo">
@@ -1156,7 +1159,7 @@
     // ============================================================
     const SHOW_BOOT_SCREEN   = false; // Boot screen GBA all'avvio
     const SHOW_GRAND_OPENING = true;  // Splash inaugurale 26-27 Feb
-
+ 
     // Pre-rendering: mostra grand opening e nasconde boot se necessario
     (function() {
       if (!SHOW_GRAND_OPENING) return;
@@ -1174,7 +1177,7 @@
       });
     })();
   </script>
-
+ 
   <!-- BOOT SCREEN -->
   <div id="bootScreen">
     <div class="boot-logo">
@@ -1187,10 +1190,10 @@
     <div class="boot-press">STO CUCINANDO</div>
     <div class="boot-copy">© 2026 MRBIGARI KITCHEN · ALL RIGHTS RESERVED</div>
   </div>
-
+ 
   <!-- APP -->
   <div id="app">
-
+ 
     <!-- MENU POKEBALL -->
     <div class="pokeball-menu">
       <div class="pokeball-menu-inner">
@@ -1208,7 +1211,7 @@
         <button class="menu-item" onclick="showPage('home')">HOME</button>
       </div>
     </div>
-
+ 
     <header>
       <div class="header-light big"></div>
       <div class="header-lights-row">
@@ -1218,36 +1221,37 @@
       </div>
       <h1>POKÉDEX SANGIOSUBA</h1>
     </header>
-
+ 
     <nav id="typeFilter">
       <span data-type="all" class="active-filter">TUTTI</span>
       <span data-type="suba">🔥 SUBA</span>
       <span data-type="sangio">💧 SANGIO</span>
       <span data-type="signorine">❤ SIGNORINE</span>
       <span data-type="outsider">🌿 OUTSIDER</span>
+      <span data-type="colleghi">🎓 COLLEGHI</span>
     </nav>
-
+ 
     <div class="search-bar">
       <input type="text" id="searchInput" placeholder="CERCA PER NOME O GRUPPO...">
       <div class="search-counter" id="searchCounter">
         <span id="counterFiltered">19</span> / <span id="counterTotal">19</span> POKÉMON
       </div>
     </div>
-
+ 
     <div class="container" id="pokeList"></div>
     <div class="pagination" id="pagination"></div>
-
+ 
     <!-- PAGINA: IL PROGETTO -->
     <div class="subpage" id="pageProgetto">
       <button class="back-btn" onclick="showPage('home')">◀ TORNA AL POKÉDEX</button>
       <div class="progetto-wrap">
         <div class="progetto-title">IL PROGETTO</div>
-
+ 
         <!-- Scena Oak + Alakazam -->
         <div class="oak-scene">
           <img src="professor_bigari.png" alt="Professor Bigari" class="oak-img" />
         </div>
-
+ 
         <!-- Dialog box separato -->
         <div class="dialog-box">
             <p>Ciao! Sono il Professor Bigari. Ho dedicato anni a giocare ai Pokémon e pochissimo tempo a fare cose davvero utili. Il risultato? Questo Pokédex, in cui ogni mostriciattolo è associato ad una persona che in un modo o nell'altro fa parte della mia vita.</p>
@@ -1260,23 +1264,23 @@
             <p>Distinti saluti,<br>Il Professor Bigari</p>
             <span class="dialog-cursor">▼</span>
           </div>
-
+ 
       </div>
     </div>
-
+ 
     <!-- PAGINA: RECLAMI -->
     <div class="subpage" id="pageReclami">
       <button class="back-btn" onclick="showPage('home')">◀ TORNA AL POKÉDEX</button>
       <div class="reclami-wrap">
         <div class="reclami-title">RECLAMI</div>
         <div class="reclami-subtitle">HAI QUALCOSA DA RIDIRE?<br>COMPILA IL FORM QUI SOTTO.</div>
-
+ 
         <form id="reclamiForm" action="https://formspree.io/f/xzdajlon" method="POST">
           <div class="form-group">
             <label class="form-label" for="recNome">NOME RECLAMANTE</label>
             <input class="form-input" type="text" id="recNome" name="nome" placeholder="IL TUO NOME..." required />
           </div>
-
+ 
           <div class="form-group">
             <label class="form-label" for="recArea">AREA DEL RECLAMO</label>
             <select class="form-select" id="recArea" name="area" required>
@@ -1289,30 +1293,30 @@
               <option value="altro">ALTRO</option>
             </select>
           </div>
-
+ 
           <div class="form-group">
             <label class="form-label" for="recMotivo">MOTIVO DEL RECLAMO</label>
             <textarea class="form-textarea" id="recMotivo" name="motivo" placeholder="DESCRIVI QUI IL TUO RECLAMO..." required></textarea>
           </div>
-
+ 
           <button class="form-submit" type="submit">INVIA RECLAMO</button>
         </form>
-
+ 
         <div class="form-success" id="formSuccess">
           ✅ RECLAMO RICEVUTO!<br><br>
           VERRÀ ESAMINATO<br>CON LA DOVUTA SUPERFICIALITÀ.
         </div>
-
+ 
         <div class="formspree-note">
           POWERED BY FORMSPREE —
           <a href="https://formspree.io" target="_blank">CONFIGURA IL TUO ENDPOINT</a>
         </div>
       </div>
     </div>
-
+ 
     <footer>SANGIOSUBA POKÉDEX v2.0 · LIMITED EDITION</footer>
   </div>
-
+ 
   <!-- MODAL -->
   <div class="modal" id="pokeModal">
     <div class="modal-content" id="modalContent">
@@ -1345,7 +1349,7 @@
       </div>
     </div>
   </div>
-
+ 
   <script>
     // ============================================================
     // GRAND OPENING (26-27 Feb 2026)
@@ -1356,12 +1360,12 @@
       const mo = today.getMonth() + 1;
       const d = today.getDate();
       if (!(y === 2026 && mo === 2 && (d === 26 || d === 27))) return;
-
+ 
       const go = document.getElementById('grandOpening');
       go.style.display = 'flex';
-
+ 
       const colors = ['#e63946','#4895ef','#f72585','#2dc653','#ffd700','#ffffff','#ff9f1c','#a855f7'];
-
+ 
       // Coriandoli — 200 pezzi in ondate
       function launchConfetti(count, delayOffset) {
         for (let i = 0; i < count; i++) {
@@ -1388,7 +1392,7 @@
           }, delayOffset + i * 20);
         }
       }
-
+ 
       // Stelle burst laterali
       function burstStars() {
         const starEl = document.getElementById('grandOpening');
@@ -1399,12 +1403,12 @@
           starEl.appendChild(s);
         });
       }
-
+ 
       launchConfetti(120, 0);       // Prima ondata
       launchConfetti(100, 1200);    // Seconda ondata
       launchConfetti(80, 2800);     // Terza ondata
       burstStars();
-
+ 
       // Fade out dopo 5s
       setTimeout(() => {
         go.classList.add('fade-out');
@@ -1417,7 +1421,7 @@
         }, 900);
       }, 5000);
     })();
-
+ 
     // ============================================================
     // BOOT SCREEN
     // ============================================================
@@ -1434,19 +1438,20 @@
       bootEl.addEventListener('click', dismissBoot);
       document.addEventListener('keydown', dismissBoot, { once: true });
     }
-
+ 
     // ============================================================
     // DATI
     // ============================================================
     const PLACEHOLDER = 'A strange seed was planted on its back at birth. The plant sprouts and grows with this Pokémon.';
-
+ 
     const TYPE_COLORS = {
       suba:      '#e63946',
       sangio:    '#4895ef',
       signorine: '#f72585',
       outsider:  '#2dc653',
+      colleghi:  '#f4a261',
     };
-
+ 
     const pokemons = [
       { id:  1, name: 'Vanacore', specie: 'GROVYLE',      type: 'outsider',  description: "Vanacore (o Vanaculo per gli amici) è un pokémon molto particolare. Un tempo lo si trovava ramingo per le zone di Roma centro con insolite sigarette 'alle erbe'. Da quando è migrato nel suo nuovo habitat si fa vedere sempre meno. Alcuni dicono sia nei suoi nidi a farmare aura, altri che oramai sia diventato un bel PokéBollito.",                                               img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/253.png', audio: 'vanacore.mp3',       map: 'Alberone.png' },
       { id:  2, name: 'Trota', specie: 'LANTURN',         type: 'sangio',    description: "Trota è un classico esempio di pokemon surgelato, capace di sguazzare e dimenarsi senza un vero obiettivo di fondo. Stupisce la potenza muscolare dei suoi pinnapolpacci e la natura benevola. Questa è ben dimostrata soprattutto nei confronti di un piccolo Swinub della Ciociaria.",                                               img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/171.png', audio: 'trota.mp3',          map: 'Alberone.png' },
@@ -1467,7 +1472,7 @@
       { id: 17, name: 'Camilla', specie: 'SKITTY',       type: 'signorine', description: "Camilla è una dei pochi esemplari di pokémon sopravvissuti, senza effetti collaterali visibili, all'essere cresciuti insieme ad un gruppo di 'maschi veri'. Solitamente la si trova sempre in compagnia di una sua cara amica con la quale condivide una passione insolita per il gossip. Si dice che sia molto difficile guadagnare la sua totale fiducia.",                                               img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/300.png', audio: 'camilla.mp3',        map: 'Alberone.png' },
       { id: 18, name: 'Sandro Artale', specie: 'HITMONCHAN', type: 'suba',      description: "Si dice che Sandro Artale abbia l'animo di un pugile destinato al campionato mondiale. Questo pokemon ha uno spirito indomito e non demorde mai di fronte a nulla, neanche alle strette di mano. Negli ultimi anni ha riscoperto dolcezza e amore dopo aver incontrato una femmina di Houndoom.",                                               img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/107.png', audio: 'artale.mp3',         map: 'Cinecittà.png' },
       { id: 19, name: 'Asietta', specie: 'HOUNDOOM',       type: 'signorine', description: "Gli esemplari di Asietta sono considerati tra i più cazzuti (così riporta l'enciclopedia pokémon) del panorama romano. Predatori per natura, nel corso della loro evoluzione hanno affinato intelletto e furbizia, difficilmente si riesce a fregarli. Da diversi anni, sembra però aver trovato un amore stabile con un Hitmonchan del vicinato colto nel suo percorso verso l'avvocatura ad alti livelli, una bellissima coppia!",                                               img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/229.png', audio: 'asietta.mp3',        map: 'Cinecittà.png' },
-
+ 
       { id: 20, name: 'Giadina', specie: 'BELLOSSOM', type: 'signorine', description: "Giadina vorrebbe passare le sue giornate a rilassarsi senza alcuna fonte di stress. In questo modo potrebbe coltivare i suoi obiettivi da scrittrice, o perlomeno finire le serie TV ancora tra i preferiti. Da qualche anno è caduta vittima del fascino di un Gallade selvatico. Sicuramente è stata molto fortunata, ma non sapeva avrebbe dovuto accettare la presenza di un terzo incomodo chiamato playstation.", img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/182.png', audio: 'giadina.mp3', map: 'Centocelle.png' },
       { id: 21, name: 'Ciummello', specie: 'MACHAMP', type: 'suba', description: "Ciummello combatte tutta la settimana per aiutare i colleghi a formarsi adeguatamente. Nei giorni di riposo, si reca in campagna per godersi un po' di spensieratezza con la sua Eevee. Alcuni studiosi sostengono sia un pokemon molto permaloso, ma il suo cuore tenero gli fa perdonare qualsiasi fragilità, capogruppo nato.", img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/68.png', audio: 'ciummello.mp3', map: 'Morena.png' },
       { id: 22, name: 'Matilde', specie: 'VAPOREON', type: 'signorine', description: "Gli esemplari di Matilde hanno una natura mite e positiva, ma sono molto rare sul territorio italiano dato il loro essere poliglotte. Probabilmente la sua vita sarebbe potuta essere diversa se non si fosse perdutamente innamorata di un Manectric che si crede un giaguaro. Lui dice che la sta facendo sognare ad occhi aperti, ma forse è lei ad essere un pokémon fin troppo paziente.", img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/134.png', audio: 'matilde.mp3', map: 'Alberone.png' },
@@ -1476,10 +1481,10 @@
       { id: 25, name: 'Tabba', specie: 'AMPHAROS', type: 'outsider', description: "Tabba si è evoluto con l'esposizione al potere dell'amicizia. Di natura docile si mette sempre a disposizione del gruppo se chiamato in causa. Sebbene innocuo all'apparenza, quando cala la notte e iniziano le danze, i pokemon dell'altro sesso rimangono preda del suo charme irresistibile.", img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/181.png', audio: 'tabba.mp3', map: 'Serenissima.png' },
       { id: 26, name: 'Giuls', specie: 'SWINUB', type: 'signorine', description: "Gli esemplari di Giuls sono molto rari nelle zone romane, questo perché hanno una naturale tendenza verso luoghi più isolati e climi rigidi. Esperti nel trovare sorgenti sotterranee, non sorprende che abbia sviluppato un amore fortissimo nei confronti di un Lanturn incontrato durante una delle sue discese capitoline. Gli occhi sembrano sempre chiusi perché ha molto sonno, ma guai a pensare che possa sfuggirgli qualcosa!", img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/220.png', audio: 'giuls.mp3', map: 'Forano.png' },
       { id: 27, name: 'Mimmo', specie: 'SANDSHREW', type: 'signorine', description: "In natura, i Mimmo hanno un carattere molto introverso. Tendono a nascondersi scavando sotto terra, ma è più facile che loro si appallottolino e rotolino via. Pochi possono riuscire a fare breccia nel suo cuore, ma nel caso è in grado di sprigionare un amore senza eguali. Seppur immune dal punto di vista del typing, ultimamente è sempre in compagnia di un Electabuzz con il quale sembra essere estremamente felice.", img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/27.png', audio: 'mimmo.mp3', map: 'Morena.png' },
-
+ 
       { id: 28, name: 'Paccu', specie: 'ELECTABUZZ', type: 'outsider', description: "Tendenzialmente Paccu è un tipo molto tranquillo, a volte può elettrizzarsi un po' troppo ma solitamente coincide con i momenti migliori della sua squadra del cuore ('A Roma). Lo si vede spesso in gruppo, può vantare una discreta comitiva, ma ultimamente il suo cuore è stato rapito da un piccolo esemplare di Sandshrew che gli ha sconvolto la vita. In procinto di laurearsi (di nuovo) è molto attivo sul mercato del lavoro forte del suo brillante intelletto.", img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/125.png', audio: 'electabuzz.mp3', map: 'Alberone.png' },
     ];
-
+ 
     // ============================================================
     // STATO
     // ============================================================
@@ -1487,7 +1492,7 @@
     const ITEMS_PER_PAGE = 4;
     let currentType   = 'all';
     let currentSearch = '';
-
+ 
     // ============================================================
     // RENDER
     // ============================================================
@@ -1498,25 +1503,25 @@
         (p.name.toLowerCase().includes(q) || p.type.toLowerCase().includes(q))
       );
     }
-
+ 
     function renderList() {
       const list = document.getElementById('pokeList');
       list.innerHTML = '';
       const filtered  = getFiltered();
-
+ 
       // Aggiorna contatore
       document.getElementById('counterFiltered').textContent = filtered.length;
       document.getElementById('counterTotal').textContent    = pokemons.length;
-
+ 
       const start     = (currentPage - 1) * ITEMS_PER_PAGE;
       const pageItems = filtered.slice(start, start + ITEMS_PER_PAGE);
-
+ 
       if (pageItems.length === 0) {
         list.innerHTML = '<p class="no-results">NESSUN POKÉMON<br>TROVATO...</p>';
         renderPagination(0);
         return;
       }
-
+ 
       pageItems.forEach((p, i) => {
         const isPlaceholder = p.description === PLACEHOLDER;
         const div = document.createElement('div');
@@ -1537,10 +1542,10 @@
         div.addEventListener('click', () => openModal(p));
         list.appendChild(div);
       });
-
+ 
       renderPagination(filtered.length);
     }
-
+ 
     function renderPagination(total) {
       const pages = Math.ceil(total / ITEMS_PER_PAGE);
       const pag   = document.getElementById('pagination');
@@ -1553,7 +1558,7 @@
         pag.appendChild(btn);
       }
     }
-
+ 
     function goToPage(num) {
       if (num === currentPage) return;
       const container = document.getElementById('pokeList');
@@ -1567,7 +1572,7 @@
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }, 180);
     }
-
+ 
     // ============================================================
     // FILTRI & SEARCH
     // ============================================================
@@ -1580,13 +1585,13 @@
       currentPage = 1;
       renderList();
     });
-
+ 
     document.getElementById('searchInput').addEventListener('input', (e) => {
       currentSearch = e.target.value;
       currentPage   = 1;
       renderList();
     });
-
+ 
     // ============================================================
     // MODAL
     // ============================================================
@@ -1601,17 +1606,17 @@
         firstTab.classList.add('active');
         document.getElementById(firstTab.dataset.tab + 'Tab').classList.add('active');
       }
-
+ 
       // Colore accent
       const accent = TYPE_COLORS[pokemon.type] || '#cc0000';
       document.getElementById('modalStripe').style.background = accent;
-
+ 
       // Animazione per tipo
       const modalContent = document.getElementById('modalContent');
       modalContent.classList.remove('anim-suba', 'anim-sangio', 'anim-signorine', 'anim-outsider');
       void modalContent.offsetWidth; // forza reflow per riavviare animazione
       modalContent.classList.add('anim-' + pokemon.type);
-
+ 
       // Popola
       document.getElementById('modalId').textContent          = `#${String(pokemon.id).padStart(3,'0')} · ${pokemon.type.toUpperCase()}`;
       document.getElementById('modalImage').src               = pokemon.img;
@@ -1620,7 +1625,7 @@
       document.getElementById('modalSpecie').textContent     = pokemon.specie ? 'SPECIE: ' + pokemon.specie : '';
       document.getElementById('modalDescription').textContent = pokemon.description;
       document.getElementById('modalAudio').src               = pokemon.audio;
-
+ 
       // Mappa
       const mapContent = document.getElementById('mapContent');
       if (pokemon.map) {
@@ -1633,7 +1638,7 @@
       }
       document.getElementById('pokeModal').style.display = 'flex';
     }
-
+ 
     function closeModal() {
       document.getElementById('pokeModal').style.display = 'none';
       document.getElementById('modalAudio').pause();
@@ -1641,13 +1646,13 @@
       const bgMusic = document.getElementById('bgMusic');
       if (bgMusic && bgMusic.paused) bgMusic.play().catch(() => {});
     }
-
+ 
     document.getElementById('pokeModal').addEventListener('click', (e) => {
       if (e.target.id === 'pokeModal') closeModal();
     });
     document.getElementById('modalCloseBtn').addEventListener('click', closeModal);
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
-
+ 
     document.querySelectorAll('.modal-tab').forEach(tab => {
       tab.addEventListener('click', () => {
         document.querySelectorAll('.modal-tab').forEach(t => t.classList.remove('active'));
@@ -1665,13 +1670,13 @@
         }
       });
     });
-
+ 
     // ============================================================
     // MENU POKEBALL
     // ============================================================
     const pokeballBtn      = document.getElementById('pokeballBtn');
     const pokeballDropdown = document.getElementById('pokeballDropdown');
-
+ 
     pokeballBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       pokeballDropdown.classList.toggle('open');
@@ -1679,42 +1684,42 @@
     document.addEventListener('click', () => {
       pokeballDropdown.classList.remove('open');
     });
-
+ 
     // ============================================================
     // NAVIGAZIONE PAGINE
     // ============================================================
     const mainContent = ['pokeList', 'pagination', 'typeFilter', 'searchBar'];
-
+ 
     function showPage(page) {
       pokeballDropdown.classList.remove('open');
-
+ 
       // Nascondi/mostra contenuto principale
       const isHome = page === 'home';
       document.getElementById('pokeList').style.display    = isHome ? '' : 'none';
       document.getElementById('pagination').style.display  = isHome ? '' : 'none';
       document.getElementById('typeFilter').style.display  = isHome ? '' : 'none';
       document.querySelector('.search-bar').style.display  = isHome ? '' : 'none';
-
+ 
       // Nascondi tutte le subpage
       document.querySelectorAll('.subpage').forEach(p => p.classList.remove('active'));
-
+ 
       // Scanlines: disabilita sulla pagina Progetto
       const app = document.getElementById('app');
       app.classList.toggle('no-scanlines', page === 'progetto');
-
+ 
       if (!isHome) {
         const target = document.getElementById('page' + page.charAt(0).toUpperCase() + page.slice(1));
         if (target) target.classList.add('active');
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     }
-
+ 
     // ============================================================
     // FORMSPREE - gestione submit
     // ============================================================
     const reclamiForm = document.getElementById('reclamiForm');
     if (reclamiForm) {
-
+ 
       function hasSentToday() {
         try {
           const lastSent = localStorage.getItem('reclamo_last_sent');
@@ -1722,7 +1727,7 @@
           return new Date(lastSent).toDateString() === new Date().toDateString();
         } catch(e) { return false; }
       }
-
+ 
       function showBlocked() {
         reclamiForm.style.display = 'none';
         const blocked = document.createElement('div');
@@ -1732,9 +1737,9 @@
         blocked.innerHTML = 'HAI GIA INVIATO<br>UN RECLAMO OGGI.<br><br>TORNA DOMANI.';
         reclamiForm.parentNode.insertBefore(blocked, reclamiForm.nextSibling);
       }
-
+ 
       if (hasSentToday()) showBlocked();
-
+ 
       reclamiForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         if (hasSentToday()) { showBlocked(); return; }
@@ -1763,12 +1768,12 @@
         }
       });
     }
-
+ 
     // ============================================================
     // INIT
     // ============================================================
     renderList();
-
+ 
   </script>
 </body>
 </html>
